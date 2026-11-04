@@ -1,0 +1,28 @@
+# Python / IDE
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+.idea/
+.vscode/*.log
+build/
+dist/
+
+# Big data and model artifacts (keep directory README files)
+data/*
+!data/README.md
+checkpoints/*
+!checkpoints/README.md
+results/*
+!results/README.md
+
+# Secrets / local overrides
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

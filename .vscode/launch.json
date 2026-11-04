@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "TFZ: Verify Environment",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/verify_setup.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "TFZ: Week 01 Exercise Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q", "-m", "exercise"],
+      "console": "integratedTerminal"
+    }
+  ]
+}

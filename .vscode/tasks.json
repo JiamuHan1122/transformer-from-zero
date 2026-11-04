@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "TFZ: Smoke Tests",
+      "type": "shell",
+      "command": "python -m pytest -q",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "TFZ: Week01 Exercises",
+      "type": "shell",
+      "command": "python -m pytest -q -m exercise",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
