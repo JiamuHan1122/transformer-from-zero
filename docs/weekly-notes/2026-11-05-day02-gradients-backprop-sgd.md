@@ -543,3 +543,11 @@ python -m pytest -q -m exercise tests/test_week02_exercises.py
 ---
 
 *相关前置笔记：[Day 01 — Linear、Softmax 与 Cross-Entropy](2026-11-04-day01-linear-softmax-cross-entropy.md)。*
+
+---
+
+## 8. Day 02 知识词云
+
+![Day 02 知识词云：梯度、链式法则、SGD 与批量矩阵反向传播](images/day02-knowledge-wordcloud.svg)
+
+> 核心关键词：梯度、链式法则、SGD、反向传播、矩阵求导、误差矩阵、NumPy、Autograd。
