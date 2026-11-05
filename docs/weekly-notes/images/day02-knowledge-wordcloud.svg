@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+<title id="title">Transformer From Zero · Day 02 梯度与反向传播知识词云</title>
+<desc id="description">Day 02 简洁白底词云，强调梯度、链式法则、SGD、反向传播、矩阵求导、误差矩阵、Autograd、参数更新和四项测试通过。</desc>
+<rect width="1600" height="1000" fill="#fff"/>
+<g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.8">
+<text x="74" y="74" font-size="34" font-weight="750" fill="#123A69">Transformer From Zero</text>
+<text x="76" y="108" font-size="18" font-weight="600" fill="#62758A">365 DAYS / KNOWLEDGE WORD CLOUD</text>
+<text x="1265" y="91" font-size="64" font-weight="850" fill="#65228A">DAY 02</text>
+<text x="78" y="233" font-size="86" font-weight="850" fill="#65228A">链式法则</text>
+<text x="614" y="236" font-size="138" font-weight="900" fill="#123A69">梯度</text>
+<text x="1172" y="237" font-size="120" font-weight="900" fill="#E77822">SGD</text>
+<text x="72" y="369" font-size="98" font-weight="850" fill="#1479BA">反向传播</text>
+<text x="566" y="362" font-size="83" font-weight="820" fill="#0B7190">矩阵求导</text>
+<text x="1050" y="358" font-size="53" font-weight="750" fill="#15845F">Gradient Descent</text>
+<text x="90" y="451" font-size="42" font-weight="750" fill="#15845F">标量梯度</text>
+<text x="337" y="454" font-size="42" font-weight="750" fill="#65228A">∂L/∂w = (ŷ − y)x</text>
+<text x="909" y="454" font-size="39" font-weight="750" fill="#1479BA">∂L/∂b = ŷ − y</text>
+<text x="1311" y="449" font-size="40" font-weight="750" fill="#E77822">学习率 η</text>
+<text x="80" y="573" font-size="75" font-weight="800" fill="#123A69">∇W = XᵀE / N</text>
+<text x="673" y="566" font-size="63" font-weight="820" fill="#E77822">误差矩阵 E</text>
+<text x="1139" y="566" font-size="51" font-weight="780" fill="#65228A">∇b = Σ Eᵢ / N</text>
+<text x="78" y="704" font-size="83" font-weight="820" fill="#15845F">批量矩阵</text>
+<text x="475" y="687" font-size="70" font-weight="800" fill="#1479BA">Xᵀ @ E</text>
+<text x="885" y="704" font-size="72" font-weight="840" fill="#65228A">参数更新</text>
+<text x="1255" y="693" font-size="59" font-weight="800" fill="#E77822">梯度下降</text>
+<text x="97" y="786" font-size="35" font-weight="750" fill="#0B7190">输入特征</text>
+<text x="330" y="784" font-size="35" font-weight="750" fill="#65228A">输出误差</text>
+<text x="585" y="785" font-size="35" font-weight="750" fill="#15845F">样本求和</text>
+<text x="811" y="785" font-size="35" font-weight="750" fill="#123A69">权重 W</text>
+<text x="1034" y="785" font-size="35" font-weight="750" fill="#1479BA">偏置 b</text>
+<text x="1243" y="783" font-size="33" font-weight="750" fill="#62758A">Batch Size N</text>
+<text x="80" y="898" font-size="71" font-weight="840" fill="#1479BA">NumPy</text>
+<text x="423" y="897" font-size="62" font-weight="800" fill="#65228A">Autograd</text>
+<text x="811" y="891" font-size="51" font-weight="800" fill="#15845F">Loss 4.5 → 1.125</text>
+<text x="1320" y="892" font-size="37" font-weight="850" fill="#E77822">4 / 4 PASS</text>
+<text x="85" y="959" font-size="33" font-weight="750" fill="#62758A">前向传播</text>
+<text x="336" y="960" font-size="33" font-weight="750" fill="#E77822">平方误差 MSE</text>
+<text x="693" y="958" font-size="34" font-weight="750" fill="#123A69">单次更新</text>
+<text x="960" y="958" font-size="31" font-weight="750" fill="#0B7190">∇W : (D, C)</text>
+<text x="1220" y="959" font-size="25" font-weight="730" fill="#65228A">数值梯度检查 → Day 03</text>
+</g>
+<path d="M76 129 H1524" stroke="#E6ECF2" stroke-width="2"/>
+<path d="M76 976 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
