@@ -329,3 +329,11 @@ python -m pytest -q -m exercise
 **下一课（Day 02）：反向传播与梯度。** 要回答的问题是：我们已经能够计算 Loss，如何从 Loss 推导 $\partial L/\partial W$，再亲手完成一次权重更新？
 
 建议预习：导数、偏导数、链式法则、梯度下降、有限差分梯度检查。
+
+---
+
+## 7. Day 01 知识词云
+
+![Day 01 知识词云：Linear、Softmax 与 Cross-Entropy](images/day01-knowledge-wordcloud.svg)
+
+> 以当日重点概念为视觉主体：线性层与特征映射、Softmax 数值稳定性、Cross-Entropy 损失，以及 NumPy 实现和练习验证。
