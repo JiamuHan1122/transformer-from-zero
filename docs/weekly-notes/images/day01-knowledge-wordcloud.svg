@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Day 01 知识词云：Linear、Softmax、Cross-Entropy</title>
+<desc id="desc">白底学术词云，汇集线性层、矩阵乘法、Softmax 数值稳定性、平移不变性、Cross-Entropy、log_softmax、NumPy 和三项练习通过等概念。</desc>
+<rect width="1600" height="1000" fill="#FFFFFF"/>
+<g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.6">
+<text x="74" y="76" font-size="34" font-weight="750" fill="#123A69" opacity="1">Transformer From Zero</text>
+<text x="76" y="107" font-size="17" font-weight="600" fill="#62758A" opacity="1">365 DAYS  /  KNOWLEDGE WORD CLOUD</text>
+<text x="1280" y="89" font-size="56" font-weight="800" fill="#65228A" opacity="1">DAY 01</text>
+<text x="95" y="285" font-size="148" font-weight="850" fill="#1479BA" opacity="1">Linear</text>
+<text x="705" y="253" font-size="78" font-weight="800" fill="#123A69" opacity="1">线性层</text>
+<text x="1080" y="255" font-size="57" font-weight="750" fill="#65228A" opacity="1">Y = XW + b</text>
+<text x="95" y="359" font-size="49" font-weight="760" fill="#65228A" opacity="1">矩阵乘法</text>
+<text x="408" y="357" font-size="49" font-weight="760" fill="#0B7190" opacity="1">权重矩阵</text>
+<text x="726" y="357" font-size="43" font-weight="740" fill="#15845F" opacity="1">Broadcasting</text>
+<text x="1206" y="357" font-size="45" font-weight="770" fill="#E77822" opacity="1">张量维度</text>
+<text x="100" y="418" font-size="34" font-weight="720" fill="#15845F" opacity="1">特征映射</text>
+<text x="355" y="420" font-size="32" font-weight="730" fill="#62758A" opacity="1">输入特征</text>
+<text x="600" y="420" font-size="32" font-weight="730" fill="#65228A" opacity="1">输出特征</text>
+<text x="865" y="416" font-size="31" font-weight="750" fill="#E77822" opacity="1">Batch</text>
+<text x="1005" y="416" font-size="31" font-weight="750" fill="#1479BA" opacity="1">Sequence</text>
+<text x="1251" y="416" font-size="32" font-weight="730" fill="#0B7190" opacity="1">Token</text>
+<text x="1393" y="416" font-size="29" font-weight="750" fill="#65228A" opacity="1">Q · K · V</text>
+<text x="345" y="646" font-size="166" font-weight="850" fill="#65228A" opacity="1">Softmax</text>
+<text x="70" y="523" font-size="42" font-weight="780" fill="#15845F" opacity="1">数值稳定性</text>
+<text x="1222" y="511" font-size="44" font-weight="780" fill="#15845F" opacity="1">概率归一化</text>
+<text x="62" y="583" font-size="43" font-weight="800" fill="#E77822" opacity="1">减去最大值</text>
+<text x="1217" y="578" font-size="41" font-weight="780" fill="#1479BA" opacity="1">平移不变性</text>
+<text x="81" y="656" font-size="35" font-weight="740" fill="#123A69" opacity="1">指数函数</text>
+<text x="1213" y="639" font-size="39" font-weight="770" fill="#E77822" opacity="1">缩放敏感性</text>
+<text x="302" y="701" font-size="27" font-weight="640" fill="#0B7190" opacity="1">Softmax(z + c) = Softmax(z)</text>
+<text x="875" y="703" font-size="33" font-weight="750" fill="#15845F" opacity="1">Σ pᵢ = 1</text>
+<text x="1159" y="708" font-size="33" font-weight="710" fill="#65228A" opacity="1">keepdims=True</text>
+<text x="78" y="874" font-size="130" font-weight="850" fill="#E77822" opacity="1">Cross-Entropy</text>
+<text x="1180" y="803" font-size="56" font-weight="810" fill="#123A69" opacity="1">交叉熵</text>
+<text x="1168" y="869" font-size="35" font-weight="760" fill="#15845F" opacity="1">真实类别</text>
+<text x="108" y="944" font-size="35" font-weight="760" fill="#65228A" opacity="1">Loss = −log(p_true)</text>
+<text x="535" y="942" font-size="38" font-weight="750" fill="#1479BA" opacity="1">log_softmax</text>
+<text x="865" y="943" font-size="37" font-weight="730" fill="#0B7190" opacity="1">类别概率</text>
+<text x="1121" y="943" font-size="44" font-weight="800" fill="#15845F" opacity="1">NumPy</text>
+<text x="1352" y="943" font-size="28" font-weight="800" fill="#123A69" opacity="1">3 / 3 PASS</text>
+</g>
+<path d="M76 132 H1524" stroke="#E3EAF1" stroke-width="2"/>
+<path d="M76 969 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
