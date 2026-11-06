@@ -38,8 +38,26 @@ def finite_difference_gradient(
     - The shape may be 1D, 2D, or higher.
     - Use float64 working copies for numerical precision.
     """
-    raise NotImplementedError("Week 03 Task A: implement finite_difference_gradient")
+    # 1. 创建与参数形状相同的梯度数组
+    grad = np.zeros_like(parameters, dtype=np.float64)
 
+    # 2. 遍历参数数组中的每一个元素
+    for i in np.ndindex(parameters.shape):
+    # 3. 仅将当前元素增加 epsilon，计算 loss_plus
+        parameters_plus = parameters.astype(np.float64, copy=True)
+        parameters_plus[i] += epsilon
+        loss_plus = loss_fn(parameters_plus)
+
+    # 4. 仅将当前元素减少 epsilon，计算 loss_minus
+        parameters_minus = parameters.astype(np.float64, copy=True)
+        parameters_minus[i] -= epsilon
+        loss_minus = loss_fn(parameters_minus)
+
+    # 5. 用中心差分计算该元素的梯度
+        grad[i] = (loss_plus - loss_minus) / (2 * epsilon)
+
+    # 6. 返回 grad
+    return grad
 
 def gradient_check_linear_mse(
     x: np.ndarray,
@@ -69,36 +87,74 @@ def gradient_check_linear_mse(
     Hint: create one loss_fn that varies W while keeping b fixed,
     and one that varies b while keeping W fixed.
     """
-    raise NotImplementedError("Week 03 Task B: implement gradient_check_linear_mse")
+    # Step 1: 解析梯度
+    # 复用 Week 02 的 batch_linear_mse_gradients()
+    from exercises.week02 import batch_linear_mse_gradients
 
+    # Step 2: 构建 loss_w()
+    # 变化 W，固定 x、b、targets
+    def loss_w(w):
+        predictions = x @ w + bias
+        error = predictions - targets
+        return 0.5 * np.sum(error ** 2) / x.shape[0]
+
+    # Step 3: 构建 loss_b()
+    # 变化 b，固定 x、W、targets
+    def loss_b(b):
+        predictions = x @ weight + b
+        error = predictions - targets
+        return 0.5 * np.sum(error ** 2) / x.shape[0]
+    
+    # Step 4: 利用 Task A 的中心差分
+    # 计算 numeric_grad_w 和 numeric_grad_b
+    numeric_grad_w = finite_difference_gradient(
+    loss_w, weight, epsilon=epsilon
+    )
+    numeric_grad_b = finite_difference_gradient(
+    loss_b, bias, epsilon=epsilon
+    )
+    # Step 5: 分别计算相对误差
+    # 返回两个 Python float
+    analytic_loss, analytic_grad_w, analytic_grad_b = batch_linear_mse_gradients(x, weight, bias, targets)
+    relative_error_weight = np.linalg.norm(analytic_grad_w - numeric_grad_w) / max(1e-12, np.linalg.norm(analytic_grad_w) + np.linalg.norm(numeric_grad_w))
+    relative_error_bias = np.linalg.norm(analytic_grad_b - numeric_grad_b) / max(1e-12, np.linalg.norm(analytic_grad_b) + np.linalg.norm(numeric_grad_b))
+    return float(relative_error_weight), float(relative_error_bias)   
+
+
+
+
+
+from exercises.week02 import batch_linear_mse_gradients
 
 def train_linear_regression_numpy(
-    x: np.ndarray,
-    targets: np.ndarray,
-    initial_weight: np.ndarray,
-    initial_bias: np.ndarray,
-    learning_rate: float = 0.1,
-    steps: int = 200,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Task C: train a linear model using full-batch gradient descent.
+    x, targets, initial_weight, initial_bias,
+    learning_rate=0.1, steps=200
+):
+    # Step 1: 复制初始参数
+    weight = np.array(initial_weight, dtype=np.float64, copy=True)
+    bias = np.array(initial_bias, dtype=np.float64, copy=True)
 
-    Args:
-        x: (N, D) float64 inputs.
-        targets: (N, C) float64 training targets.
-        initial_weight: (D, C), initial parameters.
-        initial_bias: (C,), initial bias.
-        learning_rate: gradient-descent step size.
-        steps: number of parameter updates.
+    # Step 2: 计算并记录初始 Loss 与梯度
+    loss, grad_w, grad_b = batch_linear_mse_gradients(
+        x, weight, bias, targets
+    )
+    loss_history = [loss]
 
-    Returns:
-        (trained_weight, trained_bias, loss_history)
-        - trained_weight: same shape as initial_weight
-        - trained_bias: same shape as initial_bias
-        - loss_history: shape (steps + 1,)
-          history[0] is the loss BEFORE any update.
-          history[-1] is the loss AFTER the last update.
+    # Step 3: 开始训练
+    for step in range(steps):
 
-    Reuse the Week 02 manual gradient function; never call torch.optim.
-    Do not modify initial_weight or initial_bias in place.
-    """
-    raise NotImplementedError("Week 03 Task C: implement train_linear_regression_numpy")
+        # 更新参数
+        weight -= learning_rate * grad_w
+        bias -= learning_rate * grad_b
+
+        # 使用更新后的参数，计算下一轮 Loss 和梯度
+        loss, grad_w, grad_b = batch_linear_mse_gradients(
+            x, weight, bias, targets
+        )
+
+        # 记录更新后的 Loss
+        loss_history.append(loss)
+
+    return weight, bias, np.array(loss_history)
+
+
