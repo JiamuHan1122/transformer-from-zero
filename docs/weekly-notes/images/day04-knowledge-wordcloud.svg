@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Day 04 ReLU, MLP and backpropagation knowledge word cloud">
+<rect width="1600" height="900" fill="#ffffff"/>
+<text x="73" y="93" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="43" font-weight="850" fill="#6e2d87" >Day 04</text>
+<text x="1105" y="86" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="30" font-weight="650" fill="#31647d" >Transformer From Zero</text>
+<text x="78" y="273" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="145" font-weight="900" fill="#197b99" >ReLU</text>
+<text x="526" y="255" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="122" font-weight="900" fill="#8a3991" >非线性</text>
+<text x="1120" y="267" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="157" font-weight="900" fill="#cf712c" >MLP</text>
+<text x="91" y="412" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="98" font-weight="850" fill="#175d81" >Backpropagation</text>
+<text x="975" y="394" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="67" font-weight="850" fill="#218567" >手写反向传播</text>
+<text x="80" y="510" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="60" font-weight="830" fill="#b35f34" >Chain Rule</text>
+<text x="485" y="520" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="65" font-weight="820" fill="#257f6a" >梯度验证</text>
+<text x="918" y="512" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="67" font-weight="820" fill="#78469b" >Full-Batch</text>
+<text x="1250" y="531" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="51" font-weight="780" fill="#186d92" >Activation</text>
+<text x="152" y="684" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="106" font-weight="900" fill="#1c8c73" >y = x²</text>
+<text x="602" y="661" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="83" font-weight="850" fill="#bd6528" >两层神经网络</text>
+<text x="114" y="766" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="49" font-weight="800" fill="#566b82" >Forward</text>
+<text x="402" y="769" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="53" font-weight="800" fill="#2a79a4" >Hidden Layer</text>
+<text x="827" y="764" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="68" font-weight="800" fill="#763e9b" >W₁ · W₂</text>
+<text x="1098" y="688" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="47" font-weight="800" fill="#2c887d" >Gradient Check</text>
+<text x="1099" y="778" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="51" font-weight="820" fill="#ac5e29" >Loss ↓ 99.88%</text>
+<text x="92" y="846" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="34" font-weight="850" fill="#299573" >5/5 PASS</text>
+<text x="349" y="844" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="39" font-weight="820" fill="#9557a5" >NumPy</text>
+<text x="595" y="847" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="39" font-weight="760" fill="#267b96" >Autograd 对照</text>
+<text x="956" y="847" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="32" font-weight="750" fill="#53778a" >32 hidden units</text>
+<text x="1251" y="844" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="39" font-weight="800" fill="#b96b3e" >3000 steps</text>
+</svg>
