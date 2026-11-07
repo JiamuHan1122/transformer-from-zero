@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="830" viewBox="0 0 1500 830" role="img" aria-label="Day 04 comparison of linear and MLP training and validation losses">
+<rect width="1500" height="830" fill="#fff"/>
+<text x="75" y="92" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="47" font-weight="780" fill="#1d4056" >Day 04 · Nonlinear Function Fitting</text>
+<text x="76" y="145" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="26" font-weight="500" fill="#567082" >Target: y = x²   |   81 train   |   80 midpoint validation   |   3000 updates</text>
+<line x1="76" x2="1423" y1="172" y2="172" stroke="#d4e0e8" stroke-width="2"/>
+<text x="75" y="237" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="32" font-weight="750" fill="#1d4056" >Loss (0.5 × mean squared error)</text>
+<text x="75" y="316" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="31" font-weight="750" fill="#177baf" >Linear model</text>
+<text x="75" y="550" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="31" font-weight="750" fill="#118663" >2-layer ReLU MLP</text>
+<text x="522" y="276" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="25" font-weight="600" fill="#5e7381" >Train</text>
+<text x="959" y="276" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="25" font-weight="600" fill="#5e7381" >Validation</text>
+<rect x="503" y="293" width="398" height="125" rx="10" fill="#e9f2f8"/>
+<rect x="940" y="293" width="433" height="125" rx="10" fill="#e9f2f8"/>
+<rect x="503" y="526" width="398" height="125" rx="10" fill="#e5f5ef"/>
+<rect x="940" y="526" width="433" height="125" rx="10" fill="#e5f5ef"/>
+<text x="535" y="371" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="58" font-weight="830" fill="#196b96" >0.746769</text>
+<text x="977" y="371" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="58" font-weight="830" fill="#196b96" >0.711118</text>
+<text x="535" y="604" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="58" font-weight="830" fill="#087a5a" >0.000886</text>
+<text x="977" y="604" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="58" font-weight="830" fill="#087a5a" >0.000734</text>
+<line x1="75" y1="686" x2="1425" y2="686" stroke="#d4e0e8" stroke-width="2"/>
+<text x="75" y="758" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="56" font-weight="850" fill="#168769" >99.88% lower training loss</text>
+<text x="930" y="759" font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" font-size="27" font-weight="650" fill="#476c82" >Four parameter gradient checks passed</text>
+</svg>
