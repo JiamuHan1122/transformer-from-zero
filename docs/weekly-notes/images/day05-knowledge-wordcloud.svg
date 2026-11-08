@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Day 05 Knowledge Word Cloud — Activation Functions and Gradient Flow</title>
+<desc id="desc">A clean academic word cloud for Sigmoid, Tanh, ReLU, GELU, numerical stability, chain rule, saturation, gradient vanishing, and NumPy implementations.</desc>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<g font-family="Arial, sans-serif" letter-spacing="-0.5">
+  <text x="76" y="78" font-size="35" font-weight="800" fill="#123A69">Transformer From Zero</text>
+  <text x="78" y="110" font-size="18" font-weight="650" fill="#62758A" letter-spacing="1.1">365 DAYS  /  KNOWLEDGE WORD CLOUD</text>
+  <text x="1320" y="91" font-size="58" font-weight="900" fill="#65228A">DAY 05</text>
+  <path d="M76 140 H1524" stroke="#E3EAF1" stroke-width="2"/>
+  <text x="82" y="294" font-size="132" font-weight="900" fill="#1479BA">Sigmoid</text>
+  <text x="704" y="286" font-size="130" font-weight="900" fill="#78469B">Tanh</text>
+  <text x="1170" y="294" font-size="130" font-weight="900" fill="#168A70">ReLU</text>
+  <text x="95" y="355" font-size="34" font-weight="760" fill="#1479BA">σ(x) = 1 / (1 + e⁻ˣ)</text>
+  <text x="695" y="355" font-size="32" font-weight="760" fill="#78469B">tanh′(x) = 1 − tanh²(x)</text>
+  <text x="1165" y="355" font-size="30" font-weight="760" fill="#168A70">ReLU′(x) = 1[x &gt; 0]</text>
+</g>
+<g font-family="Noto Sans CJK SC" letter-spacing="-0.5">
+  <text x="88" y="438" font-size="47" font-weight="850" fill="#E77822">数值稳定性</text>
+  <text x="515" y="438" font-size="43" font-weight="820" fill="#15845F">饱和区</text>
+  <text x="795" y="438" font-size="43" font-weight="820" fill="#1479BA">梯度消失</text>
+  <text x="1210" y="438" font-size="43" font-weight="820" fill="#65228A">链式法则</text>
+  <text x="650" y="575" font-size="78" font-weight="900" fill="#123A69">梯度传播</text>
+  <text x="1130" y="570" font-size="47" font-weight="850" fill="#168A70">平滑门控</text>
+</g>
+<g font-family="Arial, sans-serif" letter-spacing="-0.5">
+  <text x="86" y="615" font-size="164" font-weight="900" fill="#E77822">GELU</text>
+  <text x="655" y="635" font-size="34" font-weight="750" fill="#B35F34">Tanh Approximation</text>
+  <text x="86" y="682" font-size="30" font-weight="720" fill="#566B82">GELU(x) = 0.5x [1 + tanh(√(2/π) · (x + 0.044715x³))]</text>
+  <text x="90" y="770" font-size="39" font-weight="820" fill="#0B7190">Boolean Mask</text>
+  <text x="430" y="770" font-size="39" font-weight="820" fill="#15845F">np.tanh</text>
+  <text x="690" y="770" font-size="39" font-weight="820" fill="#78469B">grad_output</text>
+  <text x="1065" y="770" font-size="39" font-weight="820" fill="#1479BA">Autograd</text>
+  <text x="1325" y="770" font-size="34" font-weight="820" fill="#B35F34">NumPy</text>
+  <text x="90" y="846" font-size="36" font-weight="820" fill="#123A69">x = 0</text>
+  <text x="235" y="846" font-size="35" font-weight="780" fill="#1479BA">0.25</text>
+  <text x="365" y="846" font-size="35" font-weight="780" fill="#78469B">1.00</text>
+  <text x="490" y="846" font-size="35" font-weight="780" fill="#168A70">0</text>
+  <text x="585" y="846" font-size="35" font-weight="780" fill="#E77822">0.50</text>
+  <text x="760" y="846" font-size="30" font-weight="760" fill="#62758A">Sigmoid · Tanh · ReLU · GELU</text>
+  <text x="1350" y="846" font-size="35" font-weight="900" fill="#15845F">8 / 8 PASS</text>
+</g>
+<path d="M76 875 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
