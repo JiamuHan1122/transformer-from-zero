@@ -14,8 +14,11 @@ from __future__ import annotations
 
 import numpy as np
 
+from exercises.week04 import relu_backward_numpy
+
 
 def sigmoid_numpy(x: np.ndarray) -> np.ndarray:
+    
     """Task A1: numerically stable elementwise Sigmoid.
 
     sigmoid(x) = 1 / (1 + exp(-x))
@@ -28,7 +31,12 @@ def sigmoid_numpy(x: np.ndarray) -> np.ndarray:
       - Handle values as large as +/-1000 with no overflow warnings.
       - Preserve shape; do not modify x.
     """
-    raise NotImplementedError("Day 05 Task A1: implement stable sigmoid_numpy")
+    forward = np.zeros_like(x, dtype=np.float64)
+    mask = x >= 0
+    exp_x = np.exp(x[~mask])
+    forward[mask] = 1 / (1 + np.exp(-x[mask]))
+    forward[~mask] = exp_x / (1 + exp_x)
+    return forward
 
 
 def sigmoid_backward_numpy(
@@ -43,7 +51,8 @@ def sigmoid_backward_numpy(
 
     Input and grad_output have the same shape. Do not modify either.
     """
-    raise NotImplementedError("Day 05 Task A2: implement sigmoid_backward_numpy")
+    s = sigmoid_numpy(pre_activation)
+    return grad_output * s * (1 - s)
 
 
 def tanh_numpy(x: np.ndarray) -> np.ndarray:
@@ -52,7 +61,7 @@ def tanh_numpy(x: np.ndarray) -> np.ndarray:
     Use np.tanh for a stable float64 implementation.
     Return an array of the same shape without mutating input.
     """
-    raise NotImplementedError("Day 05 Task B1: implement tanh_numpy")
+    return np.tanh(x)
 
 
 def tanh_backward_numpy(
@@ -64,7 +73,8 @@ def tanh_backward_numpy(
     tanh'(x) = 1 - tanh(x)^2
     grad_input = grad_output * tanh'(pre_activation)
     """
-    raise NotImplementedError("Day 05 Task B2: implement tanh_backward_numpy")
+    t = tanh_numpy(pre_activation)
+    return grad_output * (1 - t**2)
 
 
 def gelu_tanh_numpy(x: np.ndarray) -> np.ndarray:
@@ -79,7 +89,10 @@ def gelu_tanh_numpy(x: np.ndarray) -> np.ndarray:
 
     Do not use torch in the implementation.
     """
-    raise NotImplementedError("Day 05 Task C1: implement gelu_tanh_numpy")
+    a = np.sqrt(2 / np.pi)
+    u = a * (x + 0.044715 * x**3)
+    t = tanh_numpy(u)
+    return 0.5 * x * (1 + t)
 
 
 def gelu_tanh_backward_numpy(
@@ -102,22 +115,23 @@ def gelu_tanh_backward_numpy(
     The approximate GELU derivative can be slightly negative; do not
     clamp it to the interval [0,1].
     """
-    raise NotImplementedError("Day 05 Task C2: implement gelu_tanh_backward_numpy")
+    a = np.sqrt(2 / np.pi)
+    u = a * (pre_activation + 0.044715 * pre_activation**3)
+    t = tanh_numpy(u)
+    du_dx = a * (1 + 3 * 0.044715 * pre_activation**2)
+    df_dx = 0.5 * (1 + t) + 0.5 * pre_activation * (1 - t**2) * du_dx
+    return grad_output * df_dx
 
 
-def activation_gradient_profiles(x: np.ndarray) -> dict[str, np.ndarray]:
-    """Task D: collect derivatives of four activations on the same x grid.
+def activation_gradient_profiles(
+    x: np.ndarray,
+) -> dict[str, np.ndarray]:
 
-    Return exactly four items keyed by:
-        "sigmoid", "tanh", "relu", "gelu"
+    upstream = np.ones_like(x, dtype=np.float64)
 
-    Each value is a NumPy array the same shape as x, representing the
-    derivative of the named activation with respect to x.
-
-    Reuse your backward functions with an upstream gradient of ones.
-    Reuse Day 04's relu_backward_numpy for the "relu" entry.
-
-    At x=0 under our ReLU convention, the expected slopes are:
-        sigmoid = 0.25, tanh = 1.0, relu = 0.0, gelu = 0.5.
-    """
-    raise NotImplementedError("Day 05 Task D: implement activation_gradient_profiles")
+    return {
+        "sigmoid": sigmoid_backward_numpy(x, upstream),
+        "tanh": tanh_backward_numpy(x, upstream),
+        "relu": relu_backward_numpy(x, upstream),
+        "gelu": gelu_tanh_backward_numpy(x, upstream),
+    }
