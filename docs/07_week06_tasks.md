@@ -3,7 +3,9 @@
 > Transformer From Zero — 365 Days  
 > Date: 2026-11-09  
 > Theme: Tensor Shape / Batch × Sequence × Feature / Batched MatMul / Broadcasting  
-> Status: scaffold prepared; implementation and tests are intentionally unfinished.
+> Status: Task A–B completed; all five exercise tests passed; final training demo succeeded.
+> Learning notes: [Day 06 complete notes](weekly-notes/2026-11-09-day06-3d-sequence-linear-layer.md)
+> Knowledge word cloud: [Day 06 word cloud](weekly-notes/images/day06-knowledge-wordcloud.svg)
 
 ## Today's goal
 
@@ -166,7 +168,7 @@ Expected final result after all tasks are implemented:
 5 passed
 ~~~
 
-The scaffold intentionally raises NotImplementedError before implementation. This is expected; do not change the tests to make them pass.
+The implementation is complete. The five exercise tests passed in the user's local environment; the final end-to-end training demo also completed successfully. PyTorch is used only as a test reference, not in the NumPy implementation.
 
 ## 5. Questions to answer before moving to Attention
 
@@ -178,12 +180,13 @@ The scaffold intentionally raises NotImplementedError before implementation. Thi
 
 ## 6. Day 06 completion criteria
 
-- [ ] linear_3d_numpy implemented and tested.
-- [ ] linear_3d_mse_gradients implemented by hand.
-- [ ] All five exercise tests pass.
-- [ ] Explain parameter sharing and gradient accumulation in your own words.
+- [x] linear_3d_numpy implemented and tested.
+- [x] linear_3d_mse_gradients implemented by hand.
+- [x] All five exercise tests pass.
+- [x] Explain parameter sharing and gradient accumulation.
+- [x] Final sequence-linear training demo succeeds and outputs are inspected.
 
-Only after these checks should we move on to the next sequence-modeling component.
+Day 06 is complete. The next stage can move toward token-to-token information exchange with Attention.
 
 
 ## 7. Final training demo — shared 3D sequence linear layer
