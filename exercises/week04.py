@@ -24,7 +24,7 @@ def relu_numpy(x: np.ndarray) -> np.ndarray:
     Formula: relu(x) = max(0, x)
     Preserve the input shape.
     """
-    raise NotImplementedError("Day 04 Task A1: implement relu_numpy")
+    return np.maximum(0, x)
 
 
 def relu_backward_numpy(
@@ -46,8 +46,8 @@ def relu_backward_numpy(
 
     Do not modify either caller-supplied array.
     """
-    raise NotImplementedError("Day 04 Task A2: implement relu_backward_numpy")
-
+    grad_input = np.where(pre_activation > 0, grad_output, 0)
+    return grad_input
 
 def two_layer_mlp_numpy(
     x: np.ndarray,
@@ -56,24 +56,17 @@ def two_layer_mlp_numpy(
     w2: np.ndarray,
     b2: np.ndarray,
 ) -> np.ndarray:
-    """Task B: forward pass through a two-layer MLP.
 
-    Shapes:
-        x:  (N, D)
-        w1: (D, H)
-        b1: (H,)
-        w2: (H, C)
-        b2: (C,)
-        prediction: (N, C)
+# Step 1: 第一层线性变换
+    z1 = x @ w1 + b1
 
-    Computation:
-        z1 = x @ w1 + b1
-        hidden = relu_numpy(z1)
-        prediction = hidden @ w2 + b2
+# Step 2: 调用刚完成的 relu_numpy()
+    hidden = relu_numpy(z1)
 
-    Hint: reuse your relu_numpy function from Task A.
-    """
-    raise NotImplementedError("Day 04 Task B: implement two_layer_mlp_numpy")
+# Step 3: 第二层线性变换
+    prediction = hidden @ w2 + b2
+
+    return prediction
 
 
 def two_layer_mlp_mse_gradients(
@@ -84,29 +77,27 @@ def two_layer_mlp_mse_gradients(
     b2: np.ndarray,
     targets: np.ndarray,
 ) -> tuple[float, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Task C: manually backpropagate through the two-layer MLP.
+    # Step 1: 前向传播
+    z1 = x @ w1 + b1
+    hidden = relu_numpy(z1)
+    predictions = hidden @ w2 + b2
 
-    Same shapes as Task B, plus targets: (N, C).
+    # Step 2: 计算损失
+    N = x.shape[0]
+    error = predictions - targets
+    loss = 0.5 * np.sum(error ** 2) / N
 
-    Define:
-        z1 = x @ w1 + b1
-        hidden = ReLU(z1)
-        predictions = hidden @ w2 + b2
-        error = predictions - targets
-        loss = 0.5 * sum(error**2) / N
+    # Step 3: 输出层梯度
+    grad_predictions = error / N
 
-    Return in this exact order:
-        (loss, grad_w1, grad_b1, grad_w2, grad_b2)
+    # Step 4: 计算第二层参数的梯度
+    grad_w2 = hidden.T @ grad_predictions
+    grad_b2 = np.sum(grad_predictions, axis=0)
 
-    The scalar loss must be a Python float.
+    # Step 5: 计算第一层参数的梯度
+    grad_hidden = grad_predictions @ w2.T
+    grad_z1 = relu_backward_numpy(z1, grad_hidden)
+    grad_w1 = x.T @ grad_z1
+    grad_b1 = np.sum(grad_z1, axis=0)
 
-    Suggested chain-rule sequence:
-        1. dL/d(predictions) = error / N.
-        2. Compute gradients for w2 and b2 from hidden.
-        3. Propagate dL/d(hidden) through w2.T.
-        4. Use relu_backward_numpy(z1, grad_hidden).
-        5. Compute gradients for w1 and b1 from x.
-
-    Caution: the denominator is N, NOT N*C.
-    """
-    raise NotImplementedError("Day 04 Task C: implement two_layer_mlp_mse_gradients")
+    return float(loss), grad_w1, grad_b1, grad_w2, grad_b2

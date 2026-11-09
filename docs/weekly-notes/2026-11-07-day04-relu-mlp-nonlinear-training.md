@@ -1,5 +1,5 @@
 # Day 04｜ReLU、两层 MLP 手写反向传播与非线性训练实验
-
+单纯堆叠线性层只能形成更复杂参数化的仿射变换，无法突破线性函数的表达限制。非线性激活通过输入依赖的激活状态，使网络形成不同的局部映射，并通过组合这些映射实现对复杂非线性函数的近似。
 > Transformer From Zero — 365 Days | 2026-11-07  
 > Milestone 02：**手写两层 ReLU MLP，在非线性函数拟合中显著优于线性模型**  
 > 实验脚本：[day04_nonlinear_mlp_demo.py](../../scripts/day04_nonlinear_mlp_demo.py)  
