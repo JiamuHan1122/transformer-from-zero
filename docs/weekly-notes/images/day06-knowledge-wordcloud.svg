@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Day 06 Knowledge Word Cloud — 3D Sequence Linear Layer</title>
+<desc id="desc">A clean academic word cloud featuring Tensor Shape, Batch, Sequence, Feature, Broadcasting, Shared Weight, Gradient Accumulation, Batched MatMul, and parameter recovery.</desc>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<g font-family="Arial, sans-serif" letter-spacing="-0.7">
+  <text x="76" y="78" font-size="35" font-weight="800" fill="#123A69">Transformer From Zero</text>
+  <text x="78" y="110" font-size="18" font-weight="650" fill="#62758A" letter-spacing="1.1">365 DAYS  /  KNOWLEDGE WORD CLOUD</text>
+  <text x="1320" y="91" font-size="58" font-weight="900" fill="#65228A">DAY 06</text>
+  <path d="M76 140 H1524" stroke="#E3EAF1" stroke-width="2"/>
+  <text x="82" y="300" font-size="126" font-weight="900" fill="#1479BA">3D Tensor</text>
+  <text x="850" y="294" font-size="105" font-weight="900" fill="#168A70">Sequence</text>
+  <text x="90" y="370" font-size="38" font-weight="780" fill="#65228A">Batch × Token × Feature</text>
+  <text x="850" y="370" font-size="34" font-weight="760" fill="#E77822">X : (B, T, D)</text>
+  <text x="105" y="505" font-size="118" font-weight="900" fill="#E77822">Broadcasting</text>
+  <text x="1030" y="505" font-size="75" font-weight="900" fill="#123A69">Shared W</text>
+  <text x="110" y="565" font-size="34" font-weight="760" fill="#1479BA">X @ W + b</text>
+  <text x="555" y="565" font-size="34" font-weight="760" fill="#168A70">Batched MatMul</text>
+  <text x="1100" y="565" font-size="31" font-weight="760" fill="#65228A">One Projection</text>
+</g>
+<g font-family="Noto Sans CJK SC, Arial, sans-serif" letter-spacing="-0.7">
+  <text x="100" y="680" font-size="72" font-weight="900" fill="#123A69">梯度累积</text>
+  <text x="650" y="675" font-size="48" font-weight="850" fill="#1479BA">参数共享</text>
+  <text x="1080" y="675" font-size="43" font-weight="820" fill="#168A70">统一更新</text>
+  <text x="100" y="750" font-size="36" font-weight="800" fill="#E77822">展平 BT</text>
+  <text x="365" y="750" font-size="36" font-weight="800" fill="#65228A">矩阵梯度</text>
+  <text x="660" y="750" font-size="36" font-weight="800" fill="#0B7190">数值梯度检查</text>
+  <text x="1115" y="750" font-size="36" font-weight="800" fill="#B35F34">参数恢复</text>
+</g>
+<g font-family="Arial, sans-serif" letter-spacing="-0.5">
+  <text x="105" y="835" font-size="31" font-weight="780" fill="#123A69">dW = X_flatᵀ E_flat / (B·T)</text>
+  <text x="690" y="835" font-size="31" font-weight="780" fill="#1479BA">db = Σ E / (B·T)</text>
+  <text x="1250" y="835" font-size="34" font-weight="900" fill="#15845F">5 / 5 PASS</text>
+</g>
+<path d="M76 875 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
