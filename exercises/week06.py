@@ -46,7 +46,8 @@ def linear_3d_numpy(
     Do not reshape x unless you have a clear reason. NumPy's @ already
     supports this batched matrix multiplication.
     """
-    raise NotImplementedError("Day 06 Task A: implement linear_3d_numpy")
+    return x @ weight + bias
+
 
 
 def linear_3d_mse_gradients(
@@ -89,4 +90,15 @@ def linear_3d_mse_gradients(
 
     Do not use torch or automatic differentiation.
     """
-    raise NotImplementedError("Day 06 Task B: implement linear_3d_mse_gradients")
+    B, T, D = x.shape
+    _, _, H = targets.shape
+
+    predictions = linear_3d_numpy(x, weight, bias)
+    error = predictions - targets
+
+    loss = 0.5 * np.sum(error**2) / (B * T)
+
+    grad_weight = (x.reshape(B * T, D).T @ error.reshape(B * T, H)) / (B * T)
+    grad_bias = np.sum(error, axis=(0, 1)) / (B * T)
+
+    return loss.item(), grad_weight, grad_bias
