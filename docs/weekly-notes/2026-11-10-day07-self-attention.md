@@ -25,12 +25,12 @@
 
 **今天最终实现的计算链：**
 
-$
+$$
 X\rightarrow(Q,K,V)\rightarrow QK^\top
 \rightarrow\frac{QK^\top}{\sqrt{d_k}}
 \rightarrow\operatorname{Softmax}
 \rightarrow AV
-$
+$$
 
 这里的 $A$ 是 Attention 权重矩阵。
 
@@ -59,16 +59,16 @@ $
 
 对于向量 $x=[x_1,x_2,\ldots,x_n]$，Softmax 定义为：
 
-$
+$$
 \operatorname{Softmax}(x_i)
 =\frac{e^{x_i}}{\sum_{j=1}^{n}e^{x_j}}.
-$
+$$
 
 它把任意实数分数转换为非负权重，并满足：
 
-$
+$$
 0\leq p_i\leq1,\qquad \sum_i p_i=1.
-$
+$$
 
 在 Attention 中，我们会对每个 Query 对应的一整行 Key 分数做 Softmax。
 
@@ -78,14 +78,14 @@ $
 
 Softmax 有一个重要性质：对所有输入同时加上或减去同一个常数，输出不变：
 
-$
+$$
 \operatorname{Softmax}(x+c)
 =\operatorname{Softmax}(x).
-$
+$$
 
 因此可以减去当前归一化轴上的最大值：
 
-$
+$$
 \boxed{
 \operatorname{Softmax}(x_i)
 =
@@ -93,7 +93,7 @@ $
 {\sum_j e^{x_j-m}},
 \qquad m=\max_j x_j
 }
-$
+$$
 
 这样，指数函数的输入不大于 0，最大指数值为 1，从而显著降低上溢风险。
 
@@ -127,13 +127,13 @@ def softmax_numpy(x, axis=-1):
 
 设：
 
-$
+$$
 Q\in\mathbb R^{B\times T_q\times d_k},
 \quad
 K\in\mathbb R^{B\times T_k\times d_k},
 \quad
 V\in\mathbb R^{B\times T_k\times d_v}.
-$
+$$
 
 其中：
 
@@ -145,16 +145,16 @@ $
 
 对 Key 的最后两个维度转置：
 
-$
+$$
 K^\top\in\mathbb R^{B\times d_k\times T_k}.
-$
+$$
 
 然后批量矩阵乘法：
 
-$
+$$
 S=QK^\top
 \in\mathbb R^{B\times T_q\times T_k}.
-$
+$$
 
 矩阵中第 $i$ 行、第 $j$ 列表示第 $i$ 个 Query 与第 $j$ 个 Key 的匹配分数。
 
@@ -162,9 +162,9 @@ $
 
 原始点积为：
 
-$
+$$
 s=q\cdot k=\sum_{r=1}^{d_k}q_rk_r.
-$
+$$
 
 在一个简化假设下，如果 Q、K 的各维分量近似独立、均值为 0、方差为 1，那么每个乘积项的方差约为 1，求和后的方差约为 $d_k$。
 
@@ -172,11 +172,11 @@ $
 
 缩放：
 
-$
+$$
 \boxed{
 S_{\mathrm{scaled}}=\frac{QK^\top}{\sqrt{d_k}}
 }
-$
+$$
 
 在上述简化假设下，可以把分数的方差尺度控制在约 1。
 
@@ -184,54 +184,54 @@ $
 
 ### 4.3 Softmax 得到注意力权重
 
-$
+$$
 \boxed{
 A=\operatorname{Softmax}
 \left(\frac{QK^\top}{\sqrt{d_k}}\right)
 }
-$
+$$
 
 在最后一个维度上执行 Softmax：
 
-$
+$$
 A\in\mathbb R^{B\times T_q\times T_k}.
-$
+$$
 
 每一个 Query 对应一行权重，并且：
 
-$
+$$
 \sum_{j=1}^{T_k}A_{ij}=1.
-$
+$$
 
 ### 4.4 用权重聚合 Value
 
-$
+$$
 \boxed{O=AV}
-$
+$$
 
 维度：
 
-$
+$$
 (B,T_q,T_k)\times(B,T_k,d_v)
 \rightarrow(B,T_q,d_v).
-$
+$$
 
 每个 Query 的输出，都是所有 Value 的加权和：
 
-$
+$$
 o_i=\sum_{j=1}^{T_k}A_{ij}v_j.
-$
+$$
 
 ### 4.5 完整公式
 
-$
+$$
 \boxed{
 \operatorname{Attention}(Q,K,V)
 =
 \operatorname{Softmax}
 \left(\frac{QK^\top}{\sqrt{d_k}}\right)V
 }
-$
+$$
 
 ### 4.6 NumPy 实现
 
@@ -261,37 +261,37 @@ def scaled_dot_product_attention_numpy(q, k, v):
 
 设输入序列为：
 
-$
+$$
 X\in\mathbb R^{B\times T\times D}.
-$
+$$
 
 对同一个输入 $X$，分别使用三组独立的投影矩阵：
 
-$
+$$
 W_Q\in\mathbb R^{D\times d_k},
-$
+$$
 
-$
+$$
 W_K\in\mathbb R^{D\times d_k},
-$
+$$
 
-$
+$$
 W_V\in\mathbb R^{D\times d_v}.
-$
+$$
 
 得到：
 
-$
+$$
 \boxed{Q=XW_Q}
-$
+$$
 
-$
+$$
 \boxed{K=XW_K}
-$
+$$
 
-$
+$$
 \boxed{V=XW_V}
-$
+$$
 
 对应形状：
 
@@ -321,7 +321,7 @@ $
 
 ### 5.3 Self-Attention 的完整公式
 
-$
+$$
 \boxed{
 \operatorname{SelfAttention}(X)
 =
@@ -331,7 +331,7 @@ $
 \right)
 (XW_V)
 }
-$
+$$
 
 这里为了简洁省略了 Batch 维度上的转置记号；实际代码需要对每个 Batch 分别转置 K 的最后两个维度。
 
@@ -360,7 +360,7 @@ def self_attention_numpy(x, w_q, w_k, w_v):
 
 ### 6.1 通用 Scaled Dot-Product Attention
 
-$
+$$
 \begin{aligned}
 Q &: (B,T_q,d_k)\\
 K &: (B,T_k,d_k)\\
@@ -369,13 +369,13 @@ QK^\top &: (B,T_q,T_k)\\
 A &: (B,T_q,T_k)\\
 AV &: (B,T_q,d_v)
 \end{aligned}
-$
+$$
 
 ### 6.2 本次 Self-Attention Demo 的实际设置
 
-$
+$$
 B=2,\quad T=5,\quad D=4,\quad d_k=3,\quad d_v=4.
-$
+$$
 
 | 中间变量 | 实际形状 |
 |---|---|
@@ -415,15 +415,15 @@ python -m pytest -q -m exercise tests/test_week07_exercises.py
 
 当 $T_k=1$ 时，每个 Query 只有一个可以选择的 Key：
 
-$
+$$
 \operatorname{Softmax}([s])=[1].
-$
+$$
 
 因此：
 
-$
+$$
 O=1\cdot V=V.
-$
+$$
 
 这是一种非常直接的边界条件测试：不需要依赖复杂随机数，就能检查 Softmax 归一化和 Value 聚合是否正确。
 
@@ -431,39 +431,39 @@ $
 
 测试中令 Q 和 K 全为 0：
 
-$
+$$
 QK^\top=0.
-$
+$$
 
 Softmax 后每个 Query 对两个 Key 的权重都是：
 
-$
+$$
 A=
 \begin{bmatrix}
 0.5&0.5\\
 0.5&0.5
 \end{bmatrix}.
-$
+$$
 
 若：
 
-$
+$$
 V=
 \begin{bmatrix}
 1\\
 3
 \end{bmatrix},
-$
+$$
 
 那么：
 
-$
+$$
 O=AV=
 \begin{bmatrix}
 2\\
 2
 \end{bmatrix}.
-$
+$$
 
 每个 Query 的输出都变成两个 Token 的 Value 平均值。这证明了 Attention 的输出不是只依赖当前 Token 自身，而是能够聚合其他 Token 的信息。
 
@@ -493,7 +493,7 @@ python scripts/day07_attention_demo.py
 
 本次 Demo 打印的第 0 个序列的注意力权重（保留四位小数）：
 
-$
+$$
 A=
 \begin{bmatrix}
 0.4888&0.1764&0.1141&0.0624&0.1583\\
@@ -502,7 +502,7 @@ A=
 0.2719&0.2099&0.1771&0.1313&0.2098\\
 0.3815&0.2669&0.2519&0.0257&0.0740
 \end{bmatrix}
-$
+$$
 
 横轴是 Key Token 位置，纵轴是 Query Token 位置。
 
@@ -524,10 +524,10 @@ Maximum row-sum error: 2.220e-16
 
 即：
 
-$
+$$
 \max_i\left|\sum_j A_{ij}-1\right|
 =2.220\times10^{-16}.
-$
+$$
 
 这是双精度浮点计算精度范围内的零误差，说明每行注意力权重都正确归一化。
 
@@ -548,14 +548,14 @@ Change in output at token 0 after perturbing input token 2: 1.132912e-01
 
 也就是：
 
-$
+$$
 \left\|
 O_{\mathrm{changed}}[0,0]
 -
 O_{\mathrm{original}}[0,0]
 \right\|_2
 =0.1132912.
-$
+$$
 
 只修改 Token 2，却观察到 Token 0 的输出也发生了变化。这是因为 Token 2 的 Key/Value 会参与其他 Query 的注意力计算。
 
@@ -637,7 +637,7 @@ results/
 
 ## Day 07 完成记录
 
-$
+$$
 \boxed{
 \text{Stable Softmax}
 \rightarrow
@@ -645,7 +645,7 @@ $
 \rightarrow
 \text{Self-Attention}
 }
-$
+$$
 
 - [x] Task A：NumPy Stable Softmax
 - [x] Task B：Scaled Dot-Product Attention
