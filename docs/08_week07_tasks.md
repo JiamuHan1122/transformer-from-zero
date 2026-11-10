@@ -9,9 +9,9 @@
 
 Day 06 的 3D 线性层完成了：
 
-\[
+$
 Y=XW+b,\qquad X\in\mathbb{R}^{B\times T\times D}
-\]
+$
 
 同一组参数被所有 Token 共享，但每个位置仍然只对自己的输入向量做线性变换。它不会直接读取其他 Token 的特征。
 
@@ -25,9 +25,9 @@ Self-Attention 要解决的问题是：**让每个 Token 根据当前内容，�
 
 从输入 X 通过三组独立的线性投影得到：
 
-\[
+$
 Q=XW_Q,\qquad K=XW_K,\qquad V=XW_V
-\]
+$
 
 - **Query**：当前 Token 用来提出查询的表示。
 - **Key**：每个 Token 用来与 Query 计算匹配程度的表示。
@@ -39,41 +39,41 @@ Q、K、V 是模型学习到的三组表示，不是人工标注的语义类别�
 
 首先计算 Query 与所有 Key 的点积：
 
-\[
+$
 S=QK^\top
-\]
+$
 
 再进行缩放：
 
-\[
+$
 S_{\mathrm{scaled}}=\frac{QK^\top}{\sqrt{d_k}}
-\]
+$
 
-当 Q、K 各维分量近似独立、均值为 0、方差为 1 时，点积的方差随 \(d_k\) 增长，标准差约为 \(\sqrt{d_k}\)。缩放用于控制 Softmax 输入的数值尺度，避免维度增大时分数过大、分布过尖锐。
+当 Q、K 各维分量近似独立、均值为 0、方差为 1 时，点积的方差随 $d_k$ 增长，标准差约为 $\sqrt{d_k}$。缩放用于控制 Softmax 输入的数值尺度，避免维度增大时分数过大、分布过尖锐。
 
 沿 Key 维度做 Softmax：
 
-\[
+$
 A=\operatorname{softmax}(S_{\mathrm{scaled}},\mathrm{axis}=-1)
-\]
+$
 
 每个 Query 对所有 Key 的权重和为 1：
 
-\[
+$
 \sum_{j=1}^{T_k}A_{ij}=1
-\]
+$
 
 最后聚合 Value：
 
-\[
+$
 O=AV
-\]
+$
 
 对第 i 个 Query：
 
-\[
+$
 O_i=\sum_{j=1}^{T_k}A_{ij}V_j
-\]
+$
 
 注意：A 是“从哪里取多少信息”的权重矩阵；V 才是被聚合的内容。单独的 A 不是最终的内容输出。
 
@@ -81,7 +81,7 @@ O_i=\sum_{j=1}^{T_k}A_{ij}V_j
 
 ### 4.1 Scaled Dot-Product Attention
 
-允许 Query 长度 \(T_q\) 与 Key/Value 长度 \(T_k\) 不同：
+允许 Query 长度 $T_q$ 与 Key/Value 长度 $T_k$ 不同：
 
 | Variable | Shape |
 |---|---|
@@ -126,19 +126,19 @@ Function: softmax_numpy(x, axis=-1)
 
 公式：
 
-\[
+$
 \operatorname{softmax}(x_i)=\frac{e^{x_i}}{\sum_j e^{x_j}}
-\]
+$
 
 稳定实现：
 
-\[
+$
 m=\max(x,\mathrm{axis},\mathrm{keepdims=True})
-\]
+$
 
-\[
+$
 p_i=\frac{e^{x_i-m}}{\sum_j e^{x_j-m}}
-\]
+$
 
 要求：
 
@@ -163,17 +163,17 @@ Function: scaled_dot_product_attention_numpy(q, k, v)
 
 计算：
 
-\[
+$
 S=\frac{qk^\top}{\sqrt{d_k}}
-\]
+$
 
-\[
+$
 A=\operatorname{softmax}(S,\mathrm{axis}=-1)
-\]
+$
 
-\[
+$
 O=Av
-\]
+$
 
 返回 (output, weights)。
 
@@ -254,7 +254,7 @@ Demo 将展示：
 
 1. 为什么 A 的形状是 (B,Tq,Tk)，而不是 (B,T,D)？
 2. 为什么 Attention 权重需要乘以 V？
-3. 为什么缩放因子是 \(\sqrt{d_k}\)，而不是 \(d_k\)？
+3. 为什么缩放因子是 $\sqrt{d_k}$，而不是 $d_k$？
 4. 为什么 Softmax 应沿最后一个维度计算？
 5. 如果只有一个 Key，Attention 输出为什么必然等于该 Key 对应的 Value？
 6. Self-Attention 中，为什么改变一个 Token 可能改变其他 Token 的输出？
