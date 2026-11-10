@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Day 07 Knowledge Word Cloud — Self-Attention</title>
+<desc id="desc">Academic word cloud highlighting Self-Attention, Query, Key, Value, Stable Softmax, Scaled Dot-Product, Attention Weights, Token Interaction, matrix shapes, and the seven passing tests.</desc>
+<rect width="1600" height="900" fill="#FFFFFF"/>
+<g font-family="Arial, sans-serif" letter-spacing="-0.6">
+  <text x="76" y="76" font-size="35" font-weight="800" fill="#123A69">Transformer From Zero</text>
+  <text x="78" y="108" font-size="18" font-weight="650" fill="#62758A" letter-spacing="1.1">365 DAYS  /  KNOWLEDGE WORD CLOUD</text>
+  <text x="1320" y="90" font-size="58" font-weight="900" fill="#65228A">DAY 07</text>
+  <path d="M76 138 H1524" stroke="#E3EAF1" stroke-width="2"/>
+  <text x="85" y="290" font-size="137" font-weight="900" fill="#1479BA">Self-Attention</text>
+  <text x="90" y="355" font-size="38" font-weight="760" fill="#1479BA">Q = XWQ</text>
+  <text x="440" y="355" font-size="38" font-weight="760" fill="#78469B">K = XWK</text>
+  <text x="790" y="355" font-size="38" font-weight="760" fill="#168A70">V = XWV</text>
+  <text x="1170" y="355" font-size="33" font-weight="760" fill="#B35F34">Single Head</text>
+</g>
+<g font-family="Noto Sans CJK SC, Arial, sans-serif" letter-spacing="-0.5">
+  <text x="85" y="450" font-size="52" font-weight="900" fill="#E77822">查询 Query</text>
+  <text x="555" y="450" font-size="52" font-weight="900" fill="#78469B">键 Key</text>
+  <text x="900" y="450" font-size="52" font-weight="900" fill="#168A70">值 Value</text>
+  <text x="1190" y="450" font-size="39" font-weight="850" fill="#123A69">Token 交互</text>
+  <text x="535" y="565" font-size="78" font-weight="900" fill="#123A69">注意力权重</text>
+  <text x="92" y="565" font-size="43" font-weight="850" fill="#1479BA">稳定 Softmax</text>
+  <text x="1175" y="565" font-size="43" font-weight="850" fill="#E77822">加权聚合</text>
+</g>
+<g font-family="Arial, sans-serif" letter-spacing="-0.5">
+  <text x="90" y="650" font-size="43" font-weight="850" fill="#1479BA">QKᵀ / √dk</text>
+  <text x="500" y="650" font-size="40" font-weight="850" fill="#78469B">Softmax(axis = −1)</text>
+  <text x="1090" y="650" font-size="43" font-weight="850" fill="#168A70">Attention × V</text>
+  <text x="90" y="745" font-size="36" font-weight="820" fill="#0B7190">Batch · Sequence · Embedding</text>
+  <text x="685" y="745" font-size="36" font-weight="820" fill="#B35F34">NumPy · Matrix Shapes</text>
+  <text x="1180" y="745" font-size="36" font-weight="820" fill="#65228A">PyTorch Check</text>
+  <text x="90" y="842" font-size="37" font-weight="850" fill="#123A69">Row Sum Error</text>
+  <text x="405" y="842" font-size="37" font-weight="850" fill="#1479BA">2.220e−16</text>
+  <text x="790" y="842" font-size="37" font-weight="850" fill="#168A70">Cross-Token Mixing</text>
+  <text x="1320" y="842" font-size="38" font-weight="900" fill="#15845F">7 / 7 PASS</text>
+</g>
+<path d="M76 875 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
