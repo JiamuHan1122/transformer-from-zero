@@ -25,14 +25,14 @@
 
 **今天最终实现的计算链：**
 
-\[
+$
 X\rightarrow(Q,K,V)\rightarrow QK^\top
 \rightarrow\frac{QK^\top}{\sqrt{d_k}}
 \rightarrow\operatorname{Softmax}
 \rightarrow AV
-\]
+$
 
-这里的 \(A\) 是 Attention 权重矩阵。
+这里的 $A$ 是 Attention 权重矩阵。
 
 ## 二、先建立直觉：Query、Key、Value 分别是什么？
 
@@ -57,35 +57,35 @@ X\rightarrow(Q,K,V)\rightarrow QK^\top
 
 ### 3.1 数学定义
 
-对于向量 \(x=[x_1,x_2,\ldots,x_n]\)，Softmax 定义为：
+对于向量 $x=[x_1,x_2,\ldots,x_n]$，Softmax 定义为：
 
-\[
+$
 \operatorname{Softmax}(x_i)
 =\frac{e^{x_i}}{\sum_{j=1}^{n}e^{x_j}}.
-\]
+$
 
 它把任意实数分数转换为非负权重，并满足：
 
-\[
+$
 0\leq p_i\leq1,\qquad \sum_i p_i=1.
-\]
+$
 
 在 Attention 中，我们会对每个 Query 对应的一整行 Key 分数做 Softmax。
 
 ### 3.2 为什么必须做数值稳定处理？
 
-直接计算 \(e^{x_i}\) 可能溢出。例如输入中包含 1000 时，直接计算 \(e^{1000}\) 会超出常规浮点数的表示范围。
+直接计算 $e^{x_i}$ 可能溢出。例如输入中包含 1000 时，直接计算 $e^{1000}$ 会超出常规浮点数的表示范围。
 
 Softmax 有一个重要性质：对所有输入同时加上或减去同一个常数，输出不变：
 
-\[
+$
 \operatorname{Softmax}(x+c)
 =\operatorname{Softmax}(x).
-\]
+$
 
 因此可以减去当前归一化轴上的最大值：
 
-\[
+$
 \boxed{
 \operatorname{Softmax}(x_i)
 =
@@ -93,7 +93,7 @@ Softmax 有一个重要性质：对所有输入同时加上或减去同一个常
 {\sum_j e^{x_j-m}},
 \qquad m=\max_j x_j
 }
-\]
+$
 
 这样，指数函数的输入不大于 0，最大指数值为 1，从而显著降低上溢风险。
 
@@ -127,111 +127,111 @@ def softmax_numpy(x, axis=-1):
 
 设：
 
-\[
+$
 Q\in\mathbb R^{B\times T_q\times d_k},
 \quad
 K\in\mathbb R^{B\times T_k\times d_k},
 \quad
 V\in\mathbb R^{B\times T_k\times d_v}.
-\]
+$
 
 其中：
 
-- \(B\)：Batch Size；
-- \(T_q\)：Query 的数量；
-- \(T_k\)：Key/Value 的数量；
-- \(d_k\)：Query 和 Key 的特征维度；
-- \(d_v\)：Value 的特征维度。
+- $B$：Batch Size；
+- $T_q$：Query 的数量；
+- $T_k$：Key/Value 的数量；
+- $d_k$：Query 和 Key 的特征维度；
+- $d_v$：Value 的特征维度。
 
 对 Key 的最后两个维度转置：
 
-\[
+$
 K^\top\in\mathbb R^{B\times d_k\times T_k}.
-\]
+$
 
 然后批量矩阵乘法：
 
-\[
+$
 S=QK^\top
 \in\mathbb R^{B\times T_q\times T_k}.
-\]
+$
 
-矩阵中第 \(i\) 行、第 \(j\) 列表示第 \(i\) 个 Query 与第 \(j\) 个 Key 的匹配分数。
+矩阵中第 $i$ 行、第 $j$ 列表示第 $i$ 个 Query 与第 $j$ 个 Key 的匹配分数。
 
-### 4.2 为什么要除以 \(\sqrt{d_k}\)？
+### 4.2 为什么要除以 $\sqrt{d_k}$？
 
 原始点积为：
 
-\[
+$
 s=q\cdot k=\sum_{r=1}^{d_k}q_rk_r.
-\]
+$
 
-在一个简化假设下，如果 Q、K 的各维分量近似独立、均值为 0、方差为 1，那么每个乘积项的方差约为 1，求和后的方差约为 \(d_k\)。
+在一个简化假设下，如果 Q、K 的各维分量近似独立、均值为 0、方差为 1，那么每个乘积项的方差约为 1，求和后的方差约为 $d_k$。
 
 因此，点积的典型尺度会随着维度增大而增大。分数过大时，Softmax 容易集中到少数位置，进入较饱和的区域，使梯度变得不理想。
 
 缩放：
 
-\[
+$
 \boxed{
 S_{\mathrm{scaled}}=\frac{QK^\top}{\sqrt{d_k}}
 }
-\]
+$
 
 在上述简化假设下，可以把分数的方差尺度控制在约 1。
 
-**关键点：** 缩放因子由 Query/Key 的维度 \(d_k\) 决定，不是由 Value 的维度 \(d_v\) 决定。
+**关键点：** 缩放因子由 Query/Key 的维度 $d_k$ 决定，不是由 Value 的维度 $d_v$ 决定。
 
 ### 4.3 Softmax 得到注意力权重
 
-\[
+$
 \boxed{
 A=\operatorname{Softmax}
 \left(\frac{QK^\top}{\sqrt{d_k}}\right)
 }
-\]
+$
 
 在最后一个维度上执行 Softmax：
 
-\[
+$
 A\in\mathbb R^{B\times T_q\times T_k}.
-\]
+$
 
 每一个 Query 对应一行权重，并且：
 
-\[
+$
 \sum_{j=1}^{T_k}A_{ij}=1.
-\]
+$
 
 ### 4.4 用权重聚合 Value
 
-\[
+$
 \boxed{O=AV}
-\]
+$
 
 维度：
 
-\[
+$
 (B,T_q,T_k)\times(B,T_k,d_v)
 \rightarrow(B,T_q,d_v).
-\]
+$
 
 每个 Query 的输出，都是所有 Value 的加权和：
 
-\[
+$
 o_i=\sum_{j=1}^{T_k}A_{ij}v_j.
-\]
+$
 
 ### 4.5 完整公式
 
-\[
+$
 \boxed{
 \operatorname{Attention}(Q,K,V)
 =
 \operatorname{Softmax}
 \left(\frac{QK^\top}{\sqrt{d_k}}\right)V
 }
-\]
+$
 
 ### 4.6 NumPy 实现
 
@@ -253,7 +253,7 @@ def scaled_dot_product_attention_numpy(q, k, v):
 1. **k.transpose(0, 2, 1)**：只交换 Key 的最后两个维度，保留 Batch 维度。
 2. **softmax_numpy(scores, axis=-1)**：每个 Query 都应该在所有 Key 上归一化。
 
-本实现允许 \(T_q\) 和 \(T_k\) 不相同，也允许 \(d_k\) 和 \(d_v\) 不相同，因此它是通用的、未加 Mask 的 Scaled Dot-Product Attention，而不仅仅是方阵 Self-Attention。
+本实现允许 $T_q$ 和 $T_k$ 不相同，也允许 $d_k$ 和 $d_v$ 不相同，因此它是通用的、未加 Mask 的 Scaled Dot-Product Attention，而不仅仅是方阵 Self-Attention。
 
 ## 五、Task C：从 Attention 到 Self-Attention
 
@@ -261,49 +261,49 @@ def scaled_dot_product_attention_numpy(q, k, v):
 
 设输入序列为：
 
-\[
+$
 X\in\mathbb R^{B\times T\times D}.
-\]
+$
 
-对同一个输入 \(X\)，分别使用三组独立的投影矩阵：
+对同一个输入 $X$，分别使用三组独立的投影矩阵：
 
-\[
+$
 W_Q\in\mathbb R^{D\times d_k},
-\]
+$
 
-\[
+$
 W_K\in\mathbb R^{D\times d_k},
-\]
+$
 
-\[
+$
 W_V\in\mathbb R^{D\times d_v}.
-\]
+$
 
 得到：
 
-\[
+$
 \boxed{Q=XW_Q}
-\]
+$
 
-\[
+$
 \boxed{K=XW_K}
-\]
+$
 
-\[
+$
 \boxed{V=XW_V}
-\]
+$
 
 对应形状：
 
 | 张量 | 形状 | 含义 |
 |---|---|---|
-| \(X\) | (B, T, D) | 输入 Token 序列 |
-| \(W_Q\) | (D, dk) | Query 投影矩阵 |
-| \(W_K\) | (D, dk) | Key 投影矩阵 |
-| \(W_V\) | (D, dv) | Value 投影矩阵 |
-| \(Q\) | (B, T, dk) | 查询表示 |
-| \(K\) | (B, T, dk) | 键表示 |
-| \(V\) | (B, T, dv) | 值表示 |
+| $X$ | (B, T, D) | 输入 Token 序列 |
+| $W_Q$ | (D, dk) | Query 投影矩阵 |
+| $W_K$ | (D, dk) | Key 投影矩阵 |
+| $W_V$ | (D, dv) | Value 投影矩阵 |
+| $Q$ | (B, T, dk) | 查询表示 |
+| $K$ | (B, T, dk) | 键表示 |
+| $V$ | (B, T, dv) | 值表示 |
 
 这里 Q、K、V 来自同一份输入序列，但使用不同的投影矩阵。它们不是简单地把 X 复制三份。
 
@@ -321,7 +321,7 @@ W_V\in\mathbb R^{D\times d_v}.
 
 ### 5.3 Self-Attention 的完整公式
 
-\[
+$
 \boxed{
 \operatorname{SelfAttention}(X)
 =
@@ -331,7 +331,7 @@ W_V\in\mathbb R^{D\times d_v}.
 \right)
 (XW_V)
 }
-\]
+$
 
 这里为了简洁省略了 Batch 维度上的转置记号；实际代码需要对每个 Batch 分别转置 K 的最后两个维度。
 
@@ -360,7 +360,7 @@ def self_attention_numpy(x, w_q, w_k, w_v):
 
 ### 6.1 通用 Scaled Dot-Product Attention
 
-\[
+$
 \begin{aligned}
 Q &: (B,T_q,d_k)\\
 K &: (B,T_k,d_k)\\
@@ -369,13 +369,13 @@ QK^\top &: (B,T_q,T_k)\\
 A &: (B,T_q,T_k)\\
 AV &: (B,T_q,d_v)
 \end{aligned}
-\]
+$
 
 ### 6.2 本次 Self-Attention Demo 的实际设置
 
-\[
+$
 B=2,\quad T=5,\quad D=4,\quad d_k=3,\quad d_v=4.
-\]
+$
 
 | 中间变量 | 实际形状 |
 |---|---|
@@ -383,11 +383,11 @@ B=2,\quad T=5,\quad D=4,\quad d_k=3,\quad d_v=4.
 | Q | (2, 5, 3) |
 | K | (2, 5, 3) |
 | V | (2, 5, 4) |
-| \(QK^\top\) | (2, 5, 5) |
+| $QK^\top$ | (2, 5, 5) |
 | Attention Weights | (2, 5, 5) |
 | Output | (2, 5, 4) |
 
-注意：这里 \(d_k=3\)，而 \(d_v=4\)。这验证了实现没有错误地假设 Key 和 Value 必须使用相同的特征维度。
+注意：这里 $d_k=3$，而 $d_v=4$。这验证了实现没有错误地假设 Key 和 Value 必须使用相同的特征维度。
 
 ## 七、七项练习测试：逐项验收
 
@@ -408,22 +408,22 @@ python -m pytest -q -m exercise tests/test_week07_exercises.py
 | 3 | Softmax 对较大的正数和负数输入保持数值稳定 |
 | 4 | Scaled Dot-Product Attention 与 PyTorch 对照，检查输出形状、权重行和及输入不变性 |
 | 5 | 只有一个 Key 时，Softmax 权重必为 1，输出应等于对应 Value |
-| 6 | Self-Attention 与 PyTorch 对照，支持不同的 \(d_k\) 和 \(d_v\)，并检查输入与投影矩阵不被修改 |
+| 6 | Self-Attention 与 PyTorch 对照，支持不同的 $d_k$ 和 $d_v$，并检查输入与投影矩阵不被修改 |
 | 7 | 构造等分权重，验证 Attention 确实会跨 Token 聚合信息 |
 
 ### 7.1 为什么“只有一个 Key”是一个好测试？
 
-当 \(T_k=1\) 时，每个 Query 只有一个可以选择的 Key：
+当 $T_k=1$ 时，每个 Query 只有一个可以选择的 Key：
 
-\[
+$
 \operatorname{Softmax}([s])=[1].
-\]
+$
 
 因此：
 
-\[
+$
 O=1\cdot V=V.
-\]
+$
 
 这是一种非常直接的边界条件测试：不需要依赖复杂随机数，就能检查 Softmax 归一化和 Value 聚合是否正确。
 
@@ -431,39 +431,39 @@ O=1\cdot V=V.
 
 测试中令 Q 和 K 全为 0：
 
-\[
+$
 QK^\top=0.
-\]
+$
 
 Softmax 后每个 Query 对两个 Key 的权重都是：
 
-\[
+$
 A=
 \begin{bmatrix}
 0.5&0.5\\
 0.5&0.5
 \end{bmatrix}.
-\]
+$
 
 若：
 
-\[
+$
 V=
 \begin{bmatrix}
 1\\
 3
 \end{bmatrix},
-\]
+$
 
 那么：
 
-\[
+$
 O=AV=
 \begin{bmatrix}
 2\\
 2
 \end{bmatrix}.
-\]
+$
 
 每个 Query 的输出都变成两个 Token 的 Value 平均值。这证明了 Attention 的输出不是只依赖当前 Token 自身，而是能够聚合其他 Token 的信息。
 
@@ -493,7 +493,7 @@ python scripts/day07_attention_demo.py
 
 本次 Demo 打印的第 0 个序列的注意力权重（保留四位小数）：
 
-\[
+$
 A=
 \begin{bmatrix}
 0.4888&0.1764&0.1141&0.0624&0.1583\\
@@ -502,7 +502,7 @@ A=
 0.2719&0.2099&0.1771&0.1313&0.2098\\
 0.3815&0.2669&0.2519&0.0257&0.0740
 \end{bmatrix}
-\]
+$
 
 横轴是 Key Token 位置，纵轴是 Query Token 位置。
 
@@ -524,10 +524,10 @@ Maximum row-sum error: 2.220e-16
 
 即：
 
-\[
+$
 \max_i\left|\sum_j A_{ij}-1\right|
 =2.220\times10^{-16}.
-\]
+$
 
 这是双精度浮点计算精度范围内的零误差，说明每行注意力权重都正确归一化。
 
@@ -548,14 +548,14 @@ Change in output at token 0 after perturbing input token 2: 1.132912e-01
 
 也就是：
 
-\[
+$
 \left\|
 O_{\mathrm{changed}}[0,0]
 -
 O_{\mathrm{original}}[0,0]
 \right\|_2
 =0.1132912.
-\]
+$
 
 只修改 Token 2，却观察到 Token 0 的输出也发生了变化。这是因为 Token 2 的 Key/Value 会参与其他 Query 的注意力计算。
 
@@ -585,7 +585,7 @@ results/
 
 1. **Softmax：** 把原始分数转换为归一化权重，并通过减最大值保证数值稳定。
 2. **Query-Key 匹配：** 点积衡量 Query 和 Key 在投影空间中的匹配程度。
-3. **Scaled Dot-Product：** 除以 \(\sqrt{d_k}\)，控制点积随特征维度增长的尺度。
+3. **Scaled Dot-Product：** 除以 $\sqrt{d_k}$，控制点积随特征维度增长的尺度。
 4. **Value 聚合：** Attention 权重决定从不同 Value 中聚合多少信息。
 5. **Self-Attention：** Q、K、V 从同一输入序列生成，使 Token 能够相互读取信息。
 6. **维度意识：** 每次矩阵乘法都必须核对 Batch、序列长度、Key 维度和 Value 维度。
@@ -601,7 +601,7 @@ results/
 - Padding Mask；
 - Multi-Head Attention；
 - Attention Dropout；
-- 输出投影矩阵 \(W_O\)；
+- 输出投影矩阵 $W_O$；
 - Positional Encoding / Positional Embedding；
 - Residual Connection 与 Layer Normalization；
 - Transformer Feed-Forward Network；
@@ -626,9 +626,9 @@ results/
 下一步要解决的问题是：
 
 - 为什么只使用一个注意力头可能不够？
-- 多个头如何使用不同的 \(W_Q,W_K,W_V\) 学习不同的关系？
+- 多个头如何使用不同的 $W_Q,W_K,W_V$ 学习不同的关系？
 - 每个头的输出如何拼接？
-- 为什么还需要输出投影矩阵 \(W_O\)？
+- 为什么还需要输出投影矩阵 $W_O$？
 - Multi-Head Attention 的张量维度如何变化？
 
 从今天的单头版本出发，下一步就可以自然扩展为 Multi-Head Attention，而不是直接调用现成模块。
@@ -637,7 +637,7 @@ results/
 
 ## Day 07 完成记录
 
-\[
+$
 \boxed{
 \text{Stable Softmax}
 \rightarrow
@@ -645,7 +645,7 @@ results/
 \rightarrow
 \text{Self-Attention}
 }
-\]
+$
 
 - [x] Task A：NumPy Stable Softmax
 - [x] Task B：Scaled Dot-Product Attention
