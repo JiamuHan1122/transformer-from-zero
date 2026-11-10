@@ -13,15 +13,15 @@
 
 前几天，我们已经能用 NumPy 实现二维批量线性层：
 
-\[
+$
 Y=XW+b
-\]
+$
 
 但 Transformer 接收的不是简单的二维样本矩阵，而是一批 Token 序列。今天，我们把张量表示扩展到三维：
 
-\[
+$
 X\in\mathbb{R}^{B\times T\times D}
-\]
+$
 
 其中：
 
@@ -40,9 +40,9 @@ X\in\mathbb{R}^{B\times T\times D}
 
 例如：
 
-\[
+$
 X:(4,8,64)
-\]
+$
 
 表示：
 
@@ -58,10 +58,10 @@ X:(4,8,64)
 
 记忆方式：
 
-\[
+$
 \boxed{(B,T,D)=
 (\text{Batch},\text{Token},\text{Feature})}
-\]
+$
 
 不要把 T 和 D 混淆：Token 数量描述序列长度，Feature 数量描述每个 Token 的表示宽度。
 
@@ -71,32 +71,32 @@ X:(4,8,64)
 
 定义：
 
-\[
+$
 X\in\mathbb{R}^{B\times T\times D}
-\]
+$
 
-\[
+$
 W\in\mathbb{R}^{D\times H},\qquad
 b\in\mathbb{R}^{H}
-\]
+$
 
 计算：
 
-\[
+$
 \boxed{Y=XW+b}
-\]
+$
 
 输出：
 
-\[
+$
 Y\in\mathbb{R}^{B\times T\times H}
-\]
+$
 
 例如：
 
-\[
+$
 (4,8,64)@(64,128)\rightarrow(4,8,128)
-\]
+$
 
 这里 NumPy 的矩阵乘法会对最后两个矩阵维度执行乘法，同时保留前面的 Batch 维度，不需要手动逐条序列循环。
 
@@ -104,21 +104,21 @@ Y\in\mathbb{R}^{B\times T\times H}
 
 线性层输出的形状是：
 
-\[
+$
 Y:(B,T,H)
-\]
+$
 
 偏置的形状是：
 
-\[
+$
 b:(H,)
-\]
+$
 
 NumPy 会从最后一个维度开始对齐。偏置的 H 与输出最后一维相同，因此会沿 Batch 和 Token 两个维度广播：
 
-\[
+$
 Y_{b,t,:}=X_{b,t,:}W+b
-\]
+$
 
 注意：这里不是为每个 Token 创建一份独立偏置，而是所有 Token 使用同一份 b。
 
@@ -158,23 +158,23 @@ def linear_3d_numpy(x, weight, bias):
 
 前向传播：
 
-\[
+$
 P=XW+b
-\]
+$
 
-\[
+$
 E=P-Y
-\]
+$
 
 本练习规定的 Loss 为：
 
-\[
+$
 \boxed{
 L=\frac{1}{2BT}
 \sum_{b=1}^{B}\sum_{t=1}^{T}\sum_{h=1}^{H}
 E_{bth}^{2}
 }
-\]
+$
 
 注意归约顺序：
 
@@ -187,19 +187,19 @@ E_{bth}^{2}
 
 令：
 
-\[
+$
 M=BT
-\]
+$
 
 将输入和误差的前两个维度展平：
 
-\[
+$
 X_{\mathrm{flat}}\in\mathbb{R}^{M\times D}
-\]
+$
 
-\[
+$
 E_{\mathrm{flat}}\in\mathbb{R}^{M\times H}
-\]
+$
 
 这样，三维序列问题就转化成了 Week 02 学过的二维批量矩阵问题。
 
@@ -207,38 +207,38 @@ E_{\mathrm{flat}}\in\mathbb{R}^{M\times H}
 
 由：
 
-\[
+$
 L=\frac{1}{2M}\sum_{m=1}^{M}
 \sum_{h=1}^{H}E_{mh}^{2}
-\]
+$
 
 先得到：
 
-\[
+$
 \frac{\partial L}{\partial E_{\mathrm{flat}}}
 =\frac{E_{\mathrm{flat}}}{M}
-\]
+$
 
 因为：
 
-\[
+$
 E_{\mathrm{flat}}=X_{\mathrm{flat}}W-Y_{\mathrm{flat}}
-\]
+$
 
 所以：
 
-\[
+$
 \boxed{
 \frac{\partial L}{\partial W}
 =\frac{X_{\mathrm{flat}}^\top E_{\mathrm{flat}}}{M}
 }
-\]
+$
 
 形状检查：
 
-\[
+$
 (D,M)@(M,H)=(D,H)
-\]
+$
 
 最终梯度形状与原始权重 W 完全一致。
 
@@ -248,21 +248,21 @@ E_{\mathrm{flat}}=X_{\mathrm{flat}}W-Y_{\mathrm{flat}}
 
 偏置被所有 Token 共享，因此需要累加所有 Token 的误差：
 
-\[
+$
 \boxed{
 \frac{\partial L}{\partial b}
 =\frac{1}{M}\sum_{m=1}^{M}E_{\mathrm{flat},m}
 }
-\]
+$
 
 在原始三维形状下，对 Batch 和 Sequence 两个轴求和：
 
-\[
+$
 \boxed{
 \frac{\partial L}{\partial b}
 =\frac{1}{BT}\sum_{b=1}^{B}\sum_{t=1}^{T}E_{b,t,:}
 }
-\]
+$
 
 因此代码中：
 
@@ -276,17 +276,17 @@ grad_bias = np.sum(error, axis=(0, 1)) / (B * T)
 
 假设一共有 4 个 Token，它们共享同一份 W，各自贡献梯度：
 
-\[
+$
 g_1,g_2,g_3,g_4
-\]
+$
 
 最终梯度为：
 
-\[
+$
 \boxed{
 \nabla_W L=\frac{g_1+g_2+g_3+g_4}{4}
 }
-\]
+$
 
 先汇总梯度，再统一更新参数。
 
@@ -324,34 +324,34 @@ def linear_3d_mse_gradients(x, weight, bias, targets):
 
 已知：
 
-\[
+$
 X:(4,8,64),\quad
 W:(64,128),\quad
 b:(128,)
-\]
+$
 
 求输出形状。
 
 **解答：**
 
-\[
+$
 (4,8,64)@(64,128)
 =(4,8,128)
-\]
+$
 
 偏置广播不改变输出形状，因此：
 
-\[
+$
 \boxed{Y:(4,8,128)}
-\]
+$
 
 ### 例题二：Bias Broadcasting
 
 已知：
 
-\[
+$
 X:(4,8,64),\quad W:(64,128),\quad b:(128,)
-\]
+$
 
 问：偏置是否需要扩展成 (4,8,128) 才能相加？
 
@@ -369,13 +369,13 @@ X:(4,8,64),\quad W:(64,128),\quad b:(128,)
 
 **解答：**
 
-\[
+$
 \boxed{
 \nabla_W L=
 \frac{1}{6}
 \sum_{b=1}^{2}\sum_{t=1}^{3}g_{b,t}
 }
-\]
+$
 
 6 个 Token 的贡献汇总后，统一更新同一份权重。
 
@@ -383,9 +383,9 @@ X:(4,8,64),\quad W:(64,128),\quad b:(128,)
 
 假设 B=2、T=2、H=2，每个位置的误差都是：
 
-\[
+$
 E_{b,t,:}=[1,1]
-\]
+$
 
 求本练习定义的 Loss。
 
@@ -393,16 +393,16 @@ E_{b,t,:}=[1,1]
 
 每个 Token 的损失：
 
-\[
+$
 \frac12(1^2+1^2)=1
-\]
+$
 
 共有 4 个 Token，取平均：
 
-\[
+$
 L=\frac{1+1+1+1}{4}
 =\boxed{1}
-\]
+$
 
 如果错误地除以 BTH=8，就会得到 0.5，与本练习的 Loss 定义不一致。
 
@@ -443,9 +443,9 @@ python scripts/day06_sequence_linear_demo.py
 
 使用一个可控的合成序列回归任务：
 
-\[
+$
 Y_{b,t}=X_{b,t}W_{\mathrm{true}}+b_{\mathrm{true}}
-\]
+$
 
 每个 Token 都由同一份真实权重和偏置生成目标。
 
@@ -469,10 +469,10 @@ Y_{b,t}=X_{b,t}W_{\mathrm{true}}+b_{\mathrm{true}}
 
 | 参数 | 相对误差 |
 |---|---:|
-| Weight | \(1.145\times10^{-11}\) |
-| Bias | \(4.125\times10^{-11}\) |
+| Weight | $1.145\times10^{-11}$ |
+| Bias | $4.125\times10^{-11}$ |
 
-两项误差都远小于 \(10^{-6}\) 的验收阈值。
+两项误差都远小于 $10^{-6}$ 的验收阈值。
 
 ### 7.3 训练过程
 
@@ -487,16 +487,16 @@ Y_{b,t}=X_{b,t}W_{\mathrm{true}}+b_{\mathrm{true}}
 | 50 | 0.01142012 | 0.01577184 |
 | 100 | 0.00013750 | 0.00023420 |
 | 150 | 0.00000201 | 0.00000361 |
-| 200 | \(3.0033\times10^{-8}\) | \(5.4575\times10^{-8}\) |
+| 200 | $3.0033\times10^{-8}$ | $5.4575\times10^{-8}$ |
 
-训练和验证 Loss 都持续下降，最终达到 \(10^{-8}\) 量级。
+训练和验证 Loss 都持续下降，最终达到 $10^{-8}$ 量级。
 
 ### 7.4 参数恢复
 
 | 参数 | 最大绝对误差 |
 |---|---:|
-| \(W_{\mathrm{trained}}-W_{\mathrm{true}}\) | \(1.976921\times10^{-4}\) |
-| \(b_{\mathrm{trained}}-b_{\mathrm{true}}\) | \(1.208956\times10^{-4}\) |
+| $W_{\mathrm{trained}}-W_{\mathrm{true}}$ | $1.976921\times10^{-4}$ |
+| $b_{\mathrm{trained}}-b_{\mathrm{true}}$ | $1.208956\times10^{-4}$ |
 
 训练得到的参数已经非常接近生成目标时使用的真实参数。
 
@@ -560,13 +560,13 @@ results/day06/
 
 - 一个 Token 怎样读取其他 Token 的表示？
 - Query、Key、Value 分别承担什么作用？
-- 为什么要计算 \(QK^\top\)？
+- 为什么要计算 $QK^\top$？
 - Attention 权重怎样对 Value 做加权求和？
 - 形状如何从 (B,T,D) 变化到多头注意力中的各个维度？
 
 今天建立的张量维度、批量矩阵乘法、广播和梯度累积，将直接用于后续 Attention 实现。
 
-\[
+$
 \boxed{
 \text{3D Tensor}
 \rightarrow
@@ -576,6 +576,6 @@ results/day06/
 \rightarrow
 \text{Sequence Training}
 }
-\]
+$
 
 **Day 06 完成。**
