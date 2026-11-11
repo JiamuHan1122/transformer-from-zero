@@ -49,7 +49,31 @@ def split_heads_numpy(
 
     Do not modify x.
     """
-    raise NotImplementedError("Day 08 Task A: implement split_heads_numpy")
+    if x.ndim != 3:
+        raise ValueError(f"Input x must be 3D, got {x.ndim}D.")
+
+    if (
+        not isinstance(num_heads, (int, np.integer))
+        or isinstance(num_heads, (bool, np.bool_))
+        or num_heads <= 0
+    ):
+        raise ValueError(
+            f"num_heads must be a positive integer, got {num_heads}."
+        )
+
+    if x.shape[-1] % num_heads != 0:
+        raise ValueError(
+            f"Last dimension of x ({x.shape[-1]}) is not divisible "
+            f"by num_heads ({num_heads})."
+        )
+
+    batch_size, seq_len, _ = x.shape
+    head_dim = x.shape[-1] // num_heads
+
+    x = x.reshape(batch_size, seq_len, num_heads, head_dim)
+    x = x.transpose(0, 2, 1, 3)
+
+    return x
 
 
 def merge_heads_numpy(x: np.ndarray) -> np.ndarray:
@@ -68,7 +92,14 @@ def merge_heads_numpy(x: np.ndarray) -> np.ndarray:
 
     Do not modify x.
     """
-    raise NotImplementedError("Day 08 Task B: implement merge_heads_numpy")
+    if x.ndim != 4:
+        raise ValueError(f"Input x must be 4D, got {x.ndim}D.")
+
+    x = x.transpose(0, 2, 1, 3)
+    batch_size, seq_len, num_heads, head_dim = x.shape
+    x = x.reshape(batch_size, seq_len, num_heads * head_dim)
+
+    return x
 
 
 def multi_head_attention_numpy(
@@ -118,6 +149,23 @@ def multi_head_attention_numpy(
     - Do not use torch or automatic differentiation.
     - Do not modify x or any projection matrix.
     """
-    raise NotImplementedError(
-        "Day 08 Task C: implement multi_head_attention_numpy"
-    )
+    q = x @ w_q
+    k = x @ w_k
+    v = x @ w_v
+
+    q_heads = split_heads_numpy(q, num_heads)
+    k_heads = split_heads_numpy(k, num_heads)
+    v_heads = split_heads_numpy(v, num_heads)
+
+    scores = q_heads @ k_heads.transpose(0, 1, 3, 2)
+
+    dk = q_heads.shape[-1]
+    scores = scores / np.sqrt(dk)
+
+    weights = softmax_numpy(scores, axis=-1)
+
+    head_outputs = weights @ v_heads
+    merged = merge_heads_numpy(head_outputs)
+    output = merged @ w_o
+
+    return output, weights

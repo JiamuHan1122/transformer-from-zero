@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="700" viewBox="0 0 860 700">
+<rect width="860" height="700" fill="#ffffff"/>
+<text x="430" y="88" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="46" font-weight="700" fill="#243b53">Multi-Head Attention</text>
+<text x="430" y="145" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="30" font-weight="700" fill="#287271">Query · Key · Value</text>
+<text x="245" y="215" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="31" font-weight="700" fill="#3a506b" transform="rotate(-8 245 215)">Split Heads</text>
+<text x="625" y="215" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="31" font-weight="700" fill="#3a506b" transform="rotate(8 625 215)">Merge Heads</text>
+<text x="430" y="270" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="25" font-weight="700" fill="#2f6690">Attention Weights</text>
+<text x="430" y="325" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="22" font-weight="700" fill="#5c677d">Output Projection W^O</text>
+<text x="430" y="375" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="20" font-weight="400" fill="#287271">Independent Projections</text>
+<text x="220" y="435" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="20" font-weight="400" fill="#5c677d" transform="rotate(-8 220 435)">Softmax axis = -1</text>
+<text x="645" y="435" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="22" font-weight="700" fill="#287271" transform="rotate(8 645 435)">Token Interaction</text>
+<text x="190" y="505" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="19" font-weight="400" fill="#2f6690" transform="rotate(-10 190 505)">Reshape</text>
+<text x="670" y="505" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="19" font-weight="400" fill="#2f6690" transform="rotate(10 670 505)">Transpose</text>
+<text x="430" y="485" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="19" font-weight="400" fill="#3a506b">Scaled Dot-Product</text>
+<text x="430" y="545" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="17" font-weight="400" fill="#5c677d">Batch Matrix Multiplication</text>
+<text x="255" y="600" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="18" font-weight="400" fill="#287271" transform="rotate(-5 255 600)">Shape Invariants</text>
+<text x="610" y="600" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="21" font-weight="700" fill="#2f6690" transform="rotate(5 610 600)">dk ≠ dv</text>
+<text x="430" y="645" text-anchor="middle" font-family="Arial, Noto Sans, sans-serif" font-size="20" font-weight="700" fill="#243b53">NumPy</text>
+</svg>
