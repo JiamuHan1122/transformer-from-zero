@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
 <title id="title">Day 08 Knowledge Word Cloud — Multi-Head Attention</title>
-<desc id="desc">Day 08 Transformer From Zero word cloud in the established landscape white-background style, featuring Multi-Head Attention, Query, Key, Value, Split Heads, Merge Heads, independent projections, scaled dot-product, Softmax, attention weights, output projection, tensor operations, and eight passing tests.</desc>
+<desc id="desc">Landscape academic word cloud matching the Day 01 to Day 07 series: a white canvas, compact project header, varied keyword sizes and colors, and a concise footer. Main concepts are Query, Key, Value, Multi-Head Attention, Split Heads, Merge Heads, Softmax, Attention Weights, and Output Projection.</desc>
 <rect width="1600" height="1000" fill="#FFFFFF"/>
 <g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.7">
   <text x="74" y="76" font-size="34" font-weight="750" fill="#123A69">Transformer From Zero</text>
@@ -8,39 +8,40 @@
   <text x="1270" y="91" font-size="64" font-weight="850" fill="#65228A">DAY 08</text>
   <path d="M76 132 H1524" stroke="#E3EAF1" stroke-width="2"/>
 
-  <text x="82" y="258" font-size="112" font-weight="900" fill="#1479BA">Query</text>
-  <text x="465" y="254" font-size="106" font-weight="900" fill="#15845F">Key</text>
-  <text x="790" y="258" font-size="112" font-weight="900" fill="#65228A">Value</text>
-  <text x="1190" y="240" font-size="48" font-weight="820" fill="#123A69">Head Diversity</text>
-  <text x="1220" y="292" font-size="34" font-weight="740" fill="#62758A">tokens · heads</text>
+  <text x="88" y="276" font-size="128" font-weight="900" fill="#1479BA">Query</text>
+  <text x="560" y="267" font-size="122" font-weight="900" fill="#15845F">Key</text>
+  <text x="930" y="282" font-size="128" font-weight="900" fill="#65228A">Value</text>
+  <text x="1290" y="218" font-size="37" font-weight="820" fill="#E77822">Q · K · V</text>
+  <text x="1240" y="270" font-size="29" font-weight="730" fill="#62758A">Head 0 / Head 1</text>
 
-  <text x="88" y="372" font-size="68" font-weight="850" fill="#65228A">Split Heads</text>
-  <text x="610" y="368" font-size="57" font-weight="830" fill="#0B7190">Independent Projections</text>
-  <text x="1190" y="374" font-size="51" font-weight="850" fill="#E77822">Merge Heads</text>
+  <text x="86" y="390" font-size="67" font-weight="850" fill="#65228A">Split Heads</text>
+  <text x="590" y="390" font-size="56" font-weight="830" fill="#0B7190">Independent Projections</text>
+  <text x="1200" y="390" font-size="43" font-weight="830" fill="#E77822">Head Diversity</text>
+  <text x="92" y="446" font-size="30" font-weight="740" fill="#62758A">Reshape · Transpose</text>
+  <text x="590" y="446" font-size="30" font-weight="740" fill="#1479BA">(B, T, H · dₖ) → (B, H, T, dₖ)</text>
+  <text x="1200" y="446" font-size="27" font-weight="720" fill="#15845F">per-head attention</text>
 
-  <text x="74" y="535" font-size="112" font-weight="900" fill="#123A69">Multi-Head Attention</text>
-  <text x="104" y="612" font-size="69" font-weight="850" fill="#15845F">Scaled Dot-Product</text>
-  <text x="910" y="610" font-size="88" font-weight="900" fill="#65228A">Softmax</text>
-  <text x="1320" y="606" font-size="34" font-weight="760" fill="#E77822">QKᵀ / √dk</text>
+  <text x="78" y="574" font-size="111" font-weight="900" fill="#123A69">Multi-Head Attention</text>
+  <text x="92" y="657" font-size="65" font-weight="850" fill="#15845F">Scaled Dot-Product</text>
+  <text x="825" y="657" font-size="72" font-weight="900" fill="#E77822">Merge Heads</text>
+  <text x="1230" y="650" font-size="40" font-weight="820" fill="#65228A">QKᵀ / √dₖ</text>
 
-  <text x="300" y="725" font-size="83" font-weight="900" fill="#1479BA">Attention Weights</text>
-  <text x="1010" y="710" font-size="59" font-weight="850" fill="#15845F">Output Projection</text>
-  <text x="80" y="714" font-size="43" font-weight="800" fill="#E77822">Token Interaction</text>
+  <text x="350" y="786" font-size="112" font-weight="900" fill="#65228A">Softmax</text>
+  <text x="930" y="770" font-size="66" font-weight="880" fill="#1479BA">Attention Weights</text>
+  <text x="1030" y="832" font-size="48" font-weight="830" fill="#15845F">Output Projection</text>
+  <text x="90" y="746" font-size="42" font-weight="810" fill="#0B7190">Token Interaction</text>
+  <text x="92" y="812" font-size="28" font-weight="740" fill="#62758A">Attention × V</text>
 
-  <text x="88" y="820" font-size="58" font-weight="850" fill="#0B7190">Reshape</text>
-  <text x="390" y="820" font-size="53" font-weight="820" fill="#62758A">Transpose</text>
-  <text x="755" y="820" font-size="48" font-weight="830" fill="#65228A">Batch Matrix Multiplication</text>
-  <text x="1320" y="820" font-size="46" font-weight="850" fill="#E77822">dk ≠ dv</text>
+  <text x="90" y="900" font-size="52" font-weight="850" fill="#1479BA">Reshape</text>
+  <text x="410" y="900" font-size="49" font-weight="820" fill="#62758A">Transpose</text>
+  <text x="770" y="900" font-size="43" font-weight="820" fill="#0B7190">Batch Matrix Multiplication</text>
+  <text x="1290" y="900" font-size="45" font-weight="850" fill="#E77822">dₖ ≠ dᵥ</text>
 
-  <text x="90" y="910" font-size="43" font-weight="820" fill="#123A69">Round-trip Test</text>
-  <text x="430" y="910" font-size="40" font-weight="790" fill="#1479BA">(B,T,H·dk) → (B,H,T,dk)</text>
-  <text x="1010" y="910" font-size="48" font-weight="850" fill="#15845F">NumPy</text>
-  <text x="1280" y="910" font-size="38" font-weight="900" fill="#123A69">8 / 8 PASS</text>
-
-  <text x="92" y="958" font-size="30" font-weight="760" fill="#62758A">Attention × V</text>
-  <text x="390" y="958" font-size="30" font-weight="760" fill="#E77822">Per-Head Weights</text>
-  <text x="760" y="958" font-size="30" font-weight="760" fill="#0B7190">Shape Invariants</text>
-  <text x="1110" y="958" font-size="30" font-weight="760" fill="#65228A">Cross-Token Mixing</text>
+  <text x="92" y="956" font-size="32" font-weight="760" fill="#65228A">Round-trip Test</text>
+  <text x="425" y="956" font-size="31" font-weight="760" fill="#123A69">Shape Invariants</text>
+  <text x="770" y="956" font-size="34" font-weight="820" fill="#15845F">NumPy</text>
+  <text x="1010" y="956" font-size="30" font-weight="760" fill="#1479BA">Cross-Token Mixing</text>
+  <text x="1320" y="956" font-size="34" font-weight="900" fill="#123A69">8 / 8 PASS</text>
 </g>
 <path d="M76 976 H1524" stroke="#EDF0F6" stroke-width="2"/>
 </svg>
