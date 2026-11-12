@@ -32,7 +32,7 @@ $$
 M^{\mathrm{causal}}_{ij}
 =
 \begin{cases}
-\mathrm{False}, & j\le i,\\
+\mathrm{False}, & j\le i,\
 \mathrm{True}, & j>i.
 \end{cases}
 $$
@@ -117,7 +117,7 @@ A_i=
 \displaystyle
 \frac{\exp(s_i-m)}
 {\sum_{j\in\mathcal{V}}\exp(s_j-m)},
-& i\in\mathcal{V},\\[8pt]
+& i\in\mathcal{V},\[8pt]
 0, & i\notin\mathcal{V}.
 \end{cases}
 $$
