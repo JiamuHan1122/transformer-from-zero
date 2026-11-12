@@ -32,7 +32,7 @@ $$
 M^{\mathrm{causal}}_{ij}
 =
 \begin{cases}
-\mathrm{False}, & j\le i,\
+\mathrm{False}, & j\le i,\\
 \mathrm{True}, & j>i.
 \end{cases}
 $$
