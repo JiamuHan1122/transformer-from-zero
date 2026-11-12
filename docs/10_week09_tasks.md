@@ -20,8 +20,8 @@ Day 08 已经实现了无掩码的 Multi-Head Self-Attention。普通 Self-Atten
 
 今天统一约定：
 
-- Boolean mask 中 \`True\` 表示 blocked / 不可见；
-- \`False\` 表示 allowed / 可见；
+- Boolean mask 中 `True` 表示 blocked / 不可见；
+- `False` 表示 allowed / 可见；
 - Mask 应在 Softmax 之前应用到 Attention Scores。
 
 ## 二、Task A：Causal Mask（因果掩码）
@@ -33,17 +33,17 @@ Day 08 已经实现了无掩码的 Multi-Head Self-Attention。普通 Self-Atten
 因此，允许访问矩阵是下三角矩阵；Boolean blocked mask 则是严格上三角矩阵：
 
 $$
-M^{\\mathrm{causal}}_{ij}
+M^{\mathrm{causal}}_{ij}
 =
-\\begin{cases}
-\\mathrm{False}, & j\\le i,\\\\
-\\mathrm{True}, & j>i.
-\\end{cases}
+\begin{cases}
+\mathrm{False}, & j\le i,\\
+\mathrm{True}, & j>i.
+\end{cases}
 $$
 
 例如 T=4：
 
-| Query \\ Key | 0 | 1 | 2 | 3 |
+| Query \ Key | 0 | 1 | 2 | 3 |
 |---|---:|---:|---:|---:|
 | 0 | 允许 | 遮挡 | 遮挡 | 遮挡 |
 | 1 | 允许 | 允许 | 遮挡 | 遮挡 |
@@ -55,32 +55,32 @@ $$
 Day 08 的注意力分数：
 
 $$
-S=\\frac{QK^\\top}{\\sqrt{d_k}}
+S=\frac{QK^\top}{\sqrt{d_k}}
 $$
 
 把 Boolean mask 转换为加性掩码：允许位置加 0，遮挡位置加负无穷：
 
 $$
-\\widetilde S_{ij}
+\widetilde S_{ij}
 =
-\\begin{cases}
-S_{ij}, & M_{ij}=\\mathrm{False},\\\\
--\\infty, & M_{ij}=\\mathrm{True}.
-\\end{cases}
+\begin{cases}
+S_{ij}, & M_{ij}=\mathrm{False},\\
+-\infty, & M_{ij}=\mathrm{True}.
+\end{cases}
 $$
 
 然后再计算：
 
 $$
-A=\\operatorname{Softmax}(\\widetilde S)
+A=\operatorname{Softmax}(\widetilde S)
 $$
 
 因为 exp(-∞)=0，被遮挡位置的权重为 0。**先 Mask、后 Softmax**，才能保证剩余可见位置重新归一化。
 
 ### 2.3 实现要求
 
-文件：\`exercises/week09.py\`  
-函数：\`causal_mask_numpy(seq_len)\`
+文件：`exercises/week09.py`  
+函数：`causal_mask_numpy(seq_len)`
 
 - 输入正整数序列长度 T；
 - 返回形状为 (T,T) 的 Boolean 数组；
@@ -94,19 +94,19 @@ $$
 
 变长句子组成 Batch 时，通常需要填充到相同长度。例如：
 
-\`\`\`text
+```text
 样本 A: I    love   AI    PAD
 样本 B: I    love   PAD   PAD
-\`\`\`
+```
 
 PAD 不是有效语义 Token。作为 Key 时，PAD 位置不应被任何 Query 读取。
 
 给定 token_ids，定义：
 
 $$
-M^{\\mathrm{pad}}_{b,j}
+M^{\mathrm{pad}}_{b,j}
 =
-[\\,token\\_ids_{b,j}=pad\\_token\\_id\\,]
+[\,token\_ids_{b,j}=pad\_token\_id\,]
 $$
 
 其中方括号表示条件成立时为 True。输出形状为 (B,T)。
@@ -116,13 +116,13 @@ $$
 多头注意力分数的形状是：
 
 $$
-S\\in\\mathbb{R}^{B\\times H\\times T\\times T}
+S\in\mathbb{R}^{B\times H\times T\times T}
 $$
 
 Padding mask 的形状是 (B,T)，需要扩展为：
 
 $$
-(B,T)\\rightarrow(B,1,1,T)
+(B,T)\rightarrow(B,1,1,T)
 $$
 
 这样它遮挡每个 Batch 中的 PAD Key，并在 Head 轴和 Query 轴广播。
@@ -130,22 +130,22 @@ $$
 Causal mask 的形状 (T,T) 扩展为：
 
 $$
-(T,T)\\rightarrow(1,1,T,T)
+(T,T)\rightarrow(1,1,T,T)
 $$
 
 两者组合时使用逻辑或：
 
 $$
-M^{\\mathrm{combined}}
+M^{\mathrm{combined}}
 =
-M^{\\mathrm{causal}}\\lor M^{\\mathrm{pad}}
+M^{\mathrm{causal}}\lor M^{\mathrm{pad}}
 $$
 
 **边界说明：** Padding Mask 在今天的实现中屏蔽 PAD Key 列。PAD Query 对应的输出位置不自动等于零；训练时通常还需要在 Loss 中忽略 PAD 目标位置。
 
 ### 3.3 实现要求
 
-函数：\`padding_mask_numpy(token_ids, pad_token_id)\`
+函数：`padding_mask_numpy(token_ids, pad_token_id)`
 
 - token_ids 必须是二维 NumPy 数组 (B,T)；
 - 返回同形状 Boolean 数组；
@@ -159,9 +159,9 @@ $$
 普通 Softmax：
 
 $$
-\\operatorname{Softmax}(x_i)
+\operatorname{Softmax}(x_i)
 =
-\\frac{e^{x_i}}{\\sum_j e^{x_j}}
+\frac{e^{x_i}}{\sum_j e^{x_j}}
 $$
 
 稳定实现通常先减去最大值。但有了 mask 后，不能简单地把整行填成 -∞ 再直接做 max 和减法：**如果整行全部被遮挡，最大值也是 -∞，会出现 -∞ - (-∞) = NaN。**
@@ -179,19 +179,19 @@ $$
 
 $$
 A_i=
-\\begin{cases}
-\\displaystyle
-\\frac{\\exp(S_i-m)}
-{\\sum_{j\\in V}\\exp(S_j-m)}, & i\\in V,\\\\[8pt]
-0, & i\\notin V,
-\\end{cases}
+\begin{cases}
+\displaystyle
+\frac{\exp(S_i-m)}
+{\sum_{j\in V}\exp(S_j-m)}, & i\in V,\\[8pt]
+0, & i\notin V,
+\end{cases}
 $$
 
 其中 m 是该行可见分数的最大值。若 V 为空，则整行输出 0。
 
 ### 4.2 实现要求
 
-函数：\`masked_softmax_numpy(scores, mask, axis=-1)\`
+函数：`masked_softmax_numpy(scores, mask, axis=-1)`
 
 - scores 为 NumPy 数组；
 - mask 必须是 Boolean 数组，且可广播到 scores；
@@ -208,7 +208,7 @@ $$
 
 把前三项整合进 Day 08 的多头注意力计算。
 
-函数：\`multi_head_attention_with_mask_numpy(x, w_q, w_k, w_v, w_o, num_heads, mask=None)\`
+函数：`multi_head_attention_with_mask_numpy(x, w_q, w_k, w_v, w_o, num_heads, mask=None)`
 
 输入形状：
 
@@ -224,22 +224,22 @@ $$
 计算流程：
 
 1. 使用融合投影计算 Q、K、V；
-2. 复用 Day 08 的 \`split_heads_numpy\`；
+2. 复用 Day 08 的 `split_heads_numpy`；
 3. 计算缩放点积 Attention Scores；
-4. 若 mask 不为 None，使用 \`masked_softmax_numpy\`；
+4. 若 mask 不为 None，使用 `masked_softmax_numpy`；
 5. 用 Attention Weights 聚合 Value；
-6. 复用 Day 08 的 \`merge_heads_numpy\`；
+6. 复用 Day 08 的 `merge_heads_numpy`；
 7. 进行输出投影；
 8. 返回 output 与 attention_weights。
 
 输出形状：
 
 $$
-output\\in\\mathbb{R}^{B\\times T\\times D_{out}}
+output\in\mathbb{R}^{B\times T\times D_{out}}
 $$
 
 $$
-attention\\_weights\\in\\mathbb{R}^{B\\times H\\times T\\times T}
+attention\_weights\in\mathbb{R}^{B\times H\times T\times T}
 $$
 
 实现限制：
@@ -256,10 +256,10 @@ $$
 
 从项目根目录执行：
 
-\`\`\`powershell
+```powershell
 conda activate tfz
 python -m pytest -q -m exercise tests/test_week09_exercises.py
-\`\`\`
+```
 
 测试覆盖：
 
