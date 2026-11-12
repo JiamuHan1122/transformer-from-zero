@@ -5,9 +5,9 @@
 > **阶段：** Attention 核心机制 · Day 09  
 > **今日主题：** Causal Mask、Padding Mask、Masked Softmax、Masked Multi-Head Attention  
 > **状态：** 学习脚手架已上传；待完成实现与测试  
-> **核心实现：** \`exercises/week09.py\`  
-> **测试：** \`tests/test_week09_exercises.py\`  
-> **实验脚本：** \`scripts/day09_masked_attention_demo.py\`
+> **核心实现：** `exercises/week09.py`  
+> **测试：** `tests/test_week09_exercises.py`  
+> **实验脚本：** `scripts/day09_masked_attention_demo.py`
 
 ---
 
@@ -27,12 +27,12 @@ Day 08 的普通 Multi-Head Self-Attention 允许每个 Query 读取所有 Key�
 对 Query 位置 i，只允许读取 Key 位置 j 满足 j ≤ i 的信息。
 
 $$
-M^{\\mathrm{causal}}_{ij}
+M^{\mathrm{causal}}_{ij}
 =
-\\begin{cases}
-\\mathrm{False}, & j\\le i,\\\\
-\\mathrm{True}, & j>i.
-\\end{cases}
+\begin{cases}
+\mathrm{False}, & j\le i,\\
+\mathrm{True}, & j>i.
+\end{cases}
 $$
 
 因此 blocked mask 是严格上三角矩阵。注意它与“允许访问矩阵”正好相反：允许矩阵是下三角（含对角线），blocked mask 是严格上三角。
@@ -40,24 +40,24 @@ $$
 原始注意力分数：
 
 $$
-S=\\frac{QK^\\top}{\\sqrt{d_k}}
+S=\frac{QK^\top}{\sqrt{d_k}}
 $$
 
 加入加性掩码的概念表达：
 
 $$
-\\widetilde S_{ij}
+\widetilde S_{ij}
 =
-\\begin{cases}
-S_{ij}, & M_{ij}=\\mathrm{False},\\\\
--\\infty, & M_{ij}=\\mathrm{True}.
-\\end{cases}
+\begin{cases}
+S_{ij}, & M_{ij}=\mathrm{False},\\
+-\infty, & M_{ij}=\mathrm{True}.
+\end{cases}
 $$
 
 然后：
 
 $$
-A=\\operatorname{Softmax}(\\widetilde S)
+A=\operatorname{Softmax}(\widetilde S)
 $$
 
 因为 exp(-∞)=0，被遮挡位置的注意力权重为零。
@@ -67,9 +67,9 @@ $$
 Padding Mask 标记输入中的 PAD 位置：
 
 $$
-M^{\\mathrm{pad}}_{b,j}
+M^{\mathrm{pad}}_{b,j}
 =
-[\\,token\\_ids_{b,j}=pad\\_token\\_id\\,]
+[\,token\_ids_{b,j}=pad\_token\_id\,]
 $$
 
 形状由 (B,T) 扩展为 (B,1,1,T)，使它能够广播到 (B,H,T,T) 的注意力分数。
@@ -79,9 +79,9 @@ Causal Mask 从 (T,T) 扩展为 (1,1,T,T)。
 组合规则：
 
 $$
-M^{\\mathrm{combined}}
+M^{\mathrm{combined}}
 =
-M^{\\mathrm{causal}}\\lor M^{\\mathrm{pad}}
+M^{\mathrm{causal}}\lor M^{\mathrm{pad}}
 $$
 
 Padding Mask 屏蔽 PAD Key；PAD Query 对应的输出通常由训练 Loss Mask 忽略。本日不把二者混为一谈。
@@ -91,15 +91,15 @@ Padding Mask 屏蔽 PAD Key；PAD Query 对应的输出通常由训练 Loss Mask
 普通 Softmax：
 
 $$
-\\operatorname{Softmax}(x_i)
+\operatorname{Softmax}(x_i)
 =
-\\frac{e^{x_i}}{\\sum_j e^{x_j}}
+\frac{e^{x_i}}{\sum_j e^{x_j}}
 $$
 
 数值稳定实现会减去最大值。但若一整行全部填充为 -∞，直接计算最大值和减法会产生：
 
 $$
--\\infty-(-\\infty)=\\mathrm{NaN}
+-\infty-(-\infty)=\mathrm{NaN}
 $$
 
 因此需要先识别可见位置。若一行存在可见位置，只在可见位置上做稳定归一化；被遮挡位置权重为零。若整行完全遮挡，则返回全零行。
@@ -115,15 +115,15 @@ $$
 ## 五、Masked Multi-Head Attention 计算链
 
 $$
-Q=XW^Q,\\quad K=XW^K,\\quad V=XW^V
+Q=XW^Q,\quad K=XW^K,\quad V=XW^V
 $$
 
 $$
-S=\\frac{Q_hK_h^\\top}{\\sqrt{d_k}}
+S=\frac{Q_hK_h^\top}{\sqrt{d_k}}
 $$
 
 $$
-A=\\operatorname{MaskedSoftmax}(S,M)
+A=\operatorname{MaskedSoftmax}(S,M)
 $$
 
 $$
@@ -131,7 +131,7 @@ O_h=AV_h
 $$
 
 $$
-Y=\\operatorname{MergeHeads}(O_h)W^O
+Y=\operatorname{MergeHeads}(O_h)W^O
 $$
 
 这里复用 Day 08 的 Split Heads 与 Merge Heads，不重新实现多头张量变换。
@@ -156,11 +156,11 @@ $$
 
 实验脚本预期输出：
 
-\`\`\`text
+```text
 results/day09/
 ├── metrics.json
 └── masked_attention.png
-\`\`\`
+```
 
 实验图用于检查 Causal Mask、注意力权重以及 Causal + Padding Mask 的组合效果。
 
