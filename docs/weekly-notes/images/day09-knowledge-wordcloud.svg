@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
 <title id="title">Day 09 Knowledge Word Cloud — Masked Attention</title>
-<desc id="desc">Landscape academic word cloud matching the established Day 01 to Day 08 series: white canvas, compact project header, varied keyword sizes and colors, and concise footer. Concepts include Causal Mask, Padding Mask, Masked Softmax, Autoregressive Attention, Broadcasting, and Numerical Stability.</desc>
+<desc id="desc">Academic word cloud matching the Day 08 series: white canvas, compact project header, varied keyword sizes, the same navy, blue, green, purple, teal and orange palette, and a concise completion footer. Main concepts are Causal Mask, Padding Mask, Masked Softmax, Autoregressive Attention, Broadcasting, Numerical Stability and Future-Token Isolation.</desc>
 <rect width="1600" height="1000" fill="#FFFFFF"/>
 <g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.7">
   <text x="74" y="76" font-size="34" font-weight="750" fill="#123A69">Transformer From Zero</text>
@@ -32,8 +32,8 @@
 
   <text x="90" y="930" font-size="49" font-weight="850" fill="#1479BA">NumPy</text>
   <text x="410" y="930" font-size="45" font-weight="820" fill="#62758A">Softmax Axis</text>
-  <text x="820" y="930" font-size="43" font-weight="820" fill="#0B7190">Information Flow</text>
-  <text x="1280" y="930" font-size="39" font-weight="900" fill="#123A69">Day 09</text>
+  <text x="820" y="930" font-size="43" font-weight="820" fill="#0B7190">Future Isolation</text>
+  <text x="1280" y="930" font-size="39" font-weight="900" fill="#15845F">15 / 15 PASS</text>
 </g>
 <path d="M76 976 H1524" stroke="#EDF0F6" stroke-width="2"/>
 </svg>
