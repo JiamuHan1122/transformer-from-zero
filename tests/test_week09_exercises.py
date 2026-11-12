@@ -20,7 +20,7 @@ def _torch_masked_reference(x, w_q, w_k, w_v, w_o, num_heads, mask):
     k = (xt @ wkt).reshape(b, t, num_heads, -1).transpose(1, 2)
     v = (xt @ wvt).reshape(b, t, num_heads, -1).transpose(1, 2)
     scores = (q @ k.transpose(-1, -2)) / np.sqrt(q.shape[-1])
-    blocked = torch.as_tensor(np.broadcast_to(mask, scores.shape), dtype=torch.bool)
+    blocked = torch.from_numpy(np.broadcast_to(mask, scores.shape).copy())
     scores = scores.masked_fill(blocked, float("-inf"))
     # The test fixtures avoid fully masked rows for the torch reference.
     weights = torch.softmax(scores, dim=-1)
