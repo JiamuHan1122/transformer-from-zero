@@ -40,7 +40,7 @@ $$
 M^{\mathrm{causal}}_{ij}
 =
 \begin{cases}
-\mathrm{False}, & j\le i,\
+\mathrm{False}, & j\le i,\\
 \mathrm{True}, & j>i.
 \end{cases}
 $$
@@ -93,7 +93,7 @@ $$
 M^{\mathrm{pad}}_{b,j}
 =
 \begin{cases}
-\mathrm{True}, & token\_ids_{b,j}=pad\_token\_id,\
+\mathrm{True}, & token\_ids_{b,j}=pad\_token\_id,\\
 \mathrm{False}, & \text{otherwise}.
 \end{cases}
 $$
@@ -170,7 +170,7 @@ $$
 \widetilde{s}_{ij}
 =
 \begin{cases}
-s_{ij}, & M_{ij}=\mathrm{False},\
+s_{ij}, & M_{ij}=\mathrm{False},\\
 -\infty, & M_{ij}=\mathrm{True}.
 \end{cases}
 $$
