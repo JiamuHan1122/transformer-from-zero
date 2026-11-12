@@ -429,7 +429,7 @@ $$
 
 ### 8.4 实验图
 
-![Day 09 Masked Multi-Head Attention](../../results/day09/masked_attention.png)
+实验图由 Demo 在本地生成，保存在被 `.gitignore` 排除的 `results/day09/masked_attention.png`；该文件不随本次文档提交上传。
 
 图中依次展示：
 
