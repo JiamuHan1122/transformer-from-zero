@@ -4,7 +4,7 @@
 > **日期：** 2026-11-13  
 > **阶段：** Transformer 输入表示 · Day 10  
 > **今日主题：** Sinusoidal Positional Encoding、Embedding Addition、Position Information  
-> **状态：** 学习框架已建立；代码实现、测试与实验结果待完成  
+> **状态：** Task A/B 完成；22 项练习测试通过；Demo 与可视化验证成功  
 > **核心实现：** exercises/week10.py  
 > **测试：** tests/test_week10_exercises.py  
 > **实验脚本：** scripts/day10_positional_encoding_demo.py
