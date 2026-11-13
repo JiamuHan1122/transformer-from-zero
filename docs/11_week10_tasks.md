@@ -94,10 +94,9 @@ $$
 | 变量 | 形状 | 含义 |
 |---|---|---|
 | positions | (T,1) | 位置编号 |
-| even_dims | (ceil(D/2),) | 偶数维度索引 |
-| div_term | (ceil(D/2),) | 每组维度的频率分母 |
-| angles | (T,ceil(D/2)) | 位置与频率组合后的角度 |
-| pe | (T,D) | 最终位置编码 |
+| dimensions | (1,D) | 维度编号 |
+| angle_rates | (T,D) | 每个位置、每个维度对应的角度 |
+| positional_encoding | (T,D) | 最终位置编码矩阵 |
 
 ## 三、Task B：将位置编码加入 Token Embedding
 
@@ -160,6 +159,13 @@ conda activate tfz
 python -m pytest -q -m exercise tests/test_week10_exercises.py
 ~~~
 
+本次实际结果：
+
+~~~text
+......................
+22 passed in 1.08s
+~~~
+
 测试覆盖：
 
 1. 输出形状与 float64 类型；
@@ -190,13 +196,13 @@ Demo 将生成：
 
 ## 七、完成标准
 
-- [ ] Task A：Sinusoidal Positional Encoding 实现完成。
-- [ ] Task B：Embedding Addition 实现完成。
-- [ ] 全部练习测试通过。
-- [ ] Demo 运行成功并生成图像与指标。
-- [ ] 能解释 pos、i、d_model 的区别。
-- [ ] 能解释为什么位置编码不改变输入张量形状。
-- [ ] 完成正式学习笔记与 Day 08/09 同系列风格知识词云。
-- [ ] 最终代码、测试、笔记统一提交 GitHub。
+- [x] Task A：Sinusoidal Positional Encoding 实现完成。
+- [x] Task B：Embedding Addition 实现完成。
+- [x] 全部练习测试通过。
+- [x] Demo 运行成功并生成图像与指标。
+- [x] 能解释 pos、i、d_model 的区别。
+- [x] 能解释为什么位置编码不改变输入张量形状。
+- [x] 完成正式学习笔记与 Day 08/09 同系列风格知识词云。
+- [x] 最终代码、测试、笔记统一提交 GitHub。
 
-**Day 10 学习任务已建立，待逐项完成。**
+**Day 10 完成：22 项测试全部通过，Demo 验证成功。**

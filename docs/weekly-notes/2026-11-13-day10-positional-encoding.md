@@ -138,35 +138,111 @@ $$
 
 ## 六、测试与实验
 
-测试命令：
+运行测试：
 
 ~~~powershell
 conda activate tfz
 python -m pytest -q -m exercise tests/test_week10_exercises.py
 ~~~
 
-Demo 命令：
+本次实际结果：
+
+~~~text
+......................
+22 passed in 1.08s
+~~~
+
+22 项测试覆盖了公式数值、位置 0 的边界值、奇数维度、非法参数、有限数值、Batch Broadcasting、输入不变性、错误秩和维度不匹配。
+
+运行 Demo：
 
 ~~~powershell
 python -m scripts.day10_positional_encoding_demo
 ~~~
 
-Demo 预定观察：
+本次实际配置：
 
-1. 不同位置、不同维度的编码值如何变化；
-2. 不同维度对的变化频率有何差异；
-3. 位置编码加入 Embedding 后，张量形状是否保持不变。
+$$
+B=2,\quad T=32,\quad D=16
+$$
 
-**实际测试结果与实验数值将在完成实现后补充，不预先填写未验证结果。**
+实际输出：
 
-## 七、Day 10 完成记录
+~~~json
+{
+  "token_embeddings_shape": [2, 32, 16],
+  "positional_encoding_shape": [32, 16],
+  "combined_input_shape": [2, 32, 16],
+  "positional_encoding_dtype": "float64",
+  "position_zero_max_error": 0.0,
+  "all_encoding_values_finite": true,
+  "mean_absolute_encoding_value": 0.5811393407647494
+}
+~~~
 
-- [ ] Task A：Sinusoidal Positional Encoding
-- [ ] Task B：Embedding Addition
-- [ ] 练习测试全部通过
-- [ ] Demo 运行成功
-- [ ] 生成实验图与指标
-- [ ] 完成统一系列风格知识词云
-- [ ] 更新最终笔记并提交 GitHub
+关键结论：
 
-**Day 10 进行中。**
+- 位置编码形状为 \((32,16)\)，与序列长度和模型维度一致。
+- 加入位置编码后的输入仍为 \((2,32,16)\)，没有改变 Batch、Sequence 或 Embedding 维度。
+- 位置 0 的最大误差为 0，说明边界值 \([0,1,0,1,\ldots]\) 正确。
+- 所有编码值均为有限数值，没有 NaN 或 Inf。
+
+## 七、实验图解读：不同维度拥有不同变化尺度
+
+第一张曲线图显示，不同维度的变化速度不同。低维度变化更快，高维度变化更慢；相邻的 Sin/Cos 维度使用相同频率，彼此相位互补。
+
+第二张热力图展示完整的 \((T,D)\) 位置编码矩阵。每一行对应一个 Embedding 维度，每一列对应一个 Token 位置。
+
+特别注意 Dimension 14 和 15 在当前序列范围内近乎平坦。这不是实现错误。对 \(d_{\mathrm{model}}=16\)，最后一对维度的分母为：
+
+$$
+10000^{14/16}\approx3162.28
+$$
+
+最大位置 \(pos=31\) 对应的角度只有：
+
+$$
+\frac{31}{3162.28}\approx0.0098
+$$
+
+所以 Sin 值接近 0，Cos 值接近 1。这说明当前 32 个位置还不足以覆盖这一组低频信号的明显变化范围。
+
+Demo 在本地生成：
+
+- results/day10/positional_encoding_channels.png
+- results/day10/positional_encoding_heatmap.png
+- results/day10/metrics.json
+
+这些文件遵循仓库规则保留在本地，不默认提交 results 目录。
+
+## 八、Day 10 知识词云
+
+![Day 10 Knowledge Word Cloud](images/day10-knowledge-wordcloud.svg)
+
+核心关键词：
+
+**Positional Encoding · Sinusoidal Encoding · Position · Token Order · Sin · Cos · Frequency · Wavelength · Embedding Addition · Broadcasting · Permutation Equivariance · NumPy**
+
+## 九、Day 10 完成记录
+
+- [x] Task A：Sinusoidal Positional Encoding
+- [x] Task B：Embedding Addition
+- [x] 支持奇数维度与非法参数检查
+- [x] 22 项练习测试全部通过
+- [x] Demo 运行成功
+- [x] 位置编码热力图与维度曲线生成成功
+- [x] 公式、维度与实验数值核对完成
+- [x] 正式学习笔记与统一系列风格知识词云完成
+- [x] GitHub 更新完成，准备同步 VS Code
+
+$$
+\boxed{
+\text{Token Embedding}
++
+\text{Positional Encoding}
+=
+\text{Position-aware Input}
+}
+$$
+
+**Day 10 完成。**
