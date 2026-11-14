@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Day 11 Knowledge Word Cloud — Decoder Input Pipeline</title>
+<desc id="desc">Academic word cloud matching the previous Transformer From Zero daily series: white canvas, compact project header, varied keyword sizes, navy, blue, green, purple, teal and orange palette. Concepts include Token IDs, Embedding Lookup, Positional Encoding, Broadcasting, Causal Mask, Padding Mask and Input Pipeline.</desc>
+<rect width="1600" height="1000" fill="#FFFFFF"/>
+<g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.7">
+  <text x="74" y="76" font-size="34" font-weight="750" fill="#123A69">Transformer From Zero</text>
+  <text x="76" y="108" font-size="18" font-weight="600" fill="#62758A" letter-spacing="0.8">365 DAYS / KNOWLEDGE WORD CLOUD</text>
+  <text x="1270" y="91" font-size="64" font-weight="850" fill="#65228A">DAY 11</text>
+  <path d="M76 132 H1524" stroke="#E3EAF1" stroke-width="2"/>
+  <text x="82" y="276" font-size="112" font-weight="900" fill="#1479BA">Token IDs</text>
+  <text x="700" y="276" font-size="108" font-weight="900" fill="#15845F">Embedding</text>
+  <text x="1220" y="218" font-size="43" font-weight="820" fill="#E77822">Lookup</text>
+  <text x="1220" y="270" font-size="40" font-weight="820" fill="#65228A">Vocabulary</text>
+  <text x="86" y="410" font-size="76" font-weight="880" fill="#65228A">Positional Encoding</text>
+  <text x="830" y="410" font-size="66" font-weight="850" fill="#0B7190">Broadcasting</text>
+  <text x="92" y="466" font-size="30" font-weight="740" fill="#62758A">Embedding Table</text>
+  <text x="830" y="466" font-size="30" font-weight="740" fill="#1479BA">Batch · Sequence · Feature</text>
+  <text x="78" y="590" font-size="112" font-weight="900" fill="#123A69">Causal Mask</text>
+  <text x="820" y="590" font-size="102" font-weight="900" fill="#15845F">Padding Mask</text>
+  <text x="92" y="676" font-size="42" font-weight="820" fill="#0B7190">Future Blocking</text>
+  <text x="820" y="676" font-size="42" font-weight="820" fill="#E77822">Key Visibility</text>
+  <text x="100" y="790" font-size="88" font-weight="900" fill="#1479BA">Input Pipeline</text>
+  <text x="970" y="785" font-size="60" font-weight="850" fill="#65228A">Mask Composition</text>
+  <text x="100" y="855" font-size="39" font-weight="800" fill="#0B7190">Token → Vector</text>
+  <text x="970" y="850" font-size="36" font-weight="790" fill="#15845F">Position-aware Input</text>
+  <text x="90" y="930" font-size="49" font-weight="850" fill="#1479BA">NumPy</text>
+  <text x="410" y="930" font-size="43" font-weight="820" fill="#62758A">Tensor Shapes</text>
+  <text x="820" y="930" font-size="43" font-weight="820" fill="#0B7190">Masked Attention</text>
+  <text x="1280" y="930" font-size="39" font-weight="900" fill="#15845F">DAY 11</text>
+</g>
+<path d="M76 976 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
