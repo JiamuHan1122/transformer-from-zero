@@ -39,7 +39,7 @@ def main() -> None:
     blocked_weights = np.where(mask, weights, 0.0)
     row_sums = weights.sum(axis=-1)
 
-    # The mask has one head dimension and broadcasts over all attention heads.
+    # Mask has one head dimension; broadcast valid-row flags to all heads.
     visible_rows = np.broadcast_to(
         ~np.all(mask, axis=-1),
         row_sums.shape,
@@ -47,6 +47,7 @@ def main() -> None:
     visible_row_error = float(
         np.max(np.abs(row_sums[visible_rows] - 1.0))
     )
+
     metrics = {
         "token_ids_shape": list(token_ids.shape),
         "embedding_table_shape": list(embedding_table.shape),
