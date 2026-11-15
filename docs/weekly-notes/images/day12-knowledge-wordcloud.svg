@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Day 12 Knowledge Word Cloud — Layer Normalization</title>
+<desc id="desc">Academic word cloud matching the Transformer From Zero daily series: white canvas, compact project header, varied keyword sizes, navy, blue, green, purple, teal and orange palette. Concepts include LayerNorm, Feature-wise Statistics, Mean, Variance, Epsilon, Gamma, Beta, Affine Transform, Broadcasting and Manual Backpropagation.</desc>
+<rect width="1600" height="1000" fill="#FFFFFF"/>
+<g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif" letter-spacing="-0.7">
+  <text x="74" y="76" font-size="34" font-weight="750" fill="#123A69">Transformer From Zero</text>
+  <text x="76" y="108" font-size="18" font-weight="600" fill="#62758A" letter-spacing="0.8">365 DAYS / KNOWLEDGE WORD CLOUD</text>
+  <text x="1270" y="91" font-size="64" font-weight="850" fill="#65228A">DAY 12</text>
+  <path d="M76 132 H1524" stroke="#E3EAF1" stroke-width="2"/>
+
+  <text x="82" y="276" font-size="112" font-weight="900" fill="#1479BA">Layer</text>
+  <text x="430" y="276" font-size="112" font-weight="900" fill="#15845F">Normalization</text>
+  <text x="1210" y="350" font-size="40" font-weight="820" fill="#E77822">Per-Token</text>
+
+  <text x="86" y="410" font-size="76" font-weight="880" fill="#65228A">Mean &amp; Variance</text>
+  <text x="820" y="410" font-size="70" font-weight="850" fill="#0B7190">Feature Axis</text>
+  <text x="92" y="466" font-size="30" font-weight="740" fill="#62758A">Population Variance</text>
+  <text x="820" y="466" font-size="30" font-weight="740" fill="#1479BA">Epsilon · Numerical Stability</text>
+
+  <text x="78" y="590" font-size="112" font-weight="900" fill="#123A69">Gamma</text>
+  <text x="570" y="590" font-size="112" font-weight="900" fill="#15845F">Beta</text>
+  <text x="1030" y="590" font-size="72" font-weight="880" fill="#E77822">Affine</text>
+  <text x="1030" y="650" font-size="52" font-weight="850" fill="#65228A">Transform</text>
+
+  <text x="92" y="730" font-size="68" font-weight="900" fill="#1479BA">Manual Backpropagation</text>
+  <text x="950" y="730" font-size="60" font-weight="870" fill="#0B7190">Gradient</text>
+  <text x="950" y="790" font-size="54" font-weight="850" fill="#15845F">Aggregation</text>
+
+  <text x="92" y="870" font-size="43" font-weight="820" fill="#65228A">BatchNorm vs LayerNorm</text>
+  <text x="760" y="870" font-size="42" font-weight="820" fill="#E77822">Broadcasting</text>
+  <text x="90" y="940" font-size="49" font-weight="850" fill="#1479BA">NumPy</text>
+  <text x="410" y="940" font-size="42" font-weight="820" fill="#62758A">Feature Statistics</text>
+  <text x="900" y="940" font-size="42" font-weight="820" fill="#0B7190">Pre-LN · Post-LN</text>
+  <text x="1370" y="940" font-size="34" font-weight="900" fill="#123A69">DAY 12</text>
+</g>
+<path d="M76 976 H1524" stroke="#EDF0F6" stroke-width="2"/>
+</svg>
