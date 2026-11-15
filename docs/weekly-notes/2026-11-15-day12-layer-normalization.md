@@ -4,7 +4,7 @@
 > **日期：** 2026-11-15  
 > **阶段：** Transformer 核心组件 · Day 12  
 > **今日主题：** LayerNorm、Feature-wise Statistics、Affine Parameters、Manual Backpropagation  
-> **状态：** 理论学习与练习脚手架已发布；实现和实验待验收  
+> **状态：** 理论学习、实现与实验全部完成；17 项专项测试及 110 项全项目测试通过  
 > **核心实现：** exercises/week12.py  
 > **测试：** tests/test_week12_exercises.py  
 > **实验脚本：** scripts/day12_layer_norm_demo.py
@@ -318,3 +318,43 @@ results/day12/
 8. LayerNorm 是 Transformer 子层的组件，不是完整 Transformer Block。
 
 **Day 12 理论学习目标：从归一化公式一直理解到三个手写梯度。**
+
+
+## 十二、最终验收记录
+
+Day 12 实现与实验已完成，以下结果来自本地实际运行记录：
+
+| 验收项目 | 实际结果 |
+|---|---:|
+| PyTorch 导入检查 | 成功，版本 2.14.1+cu126 |
+| Day 12 专项测试 | 17 passed |
+| 全项目 exercise 回归 | 110 passed, 4 deselected |
+| LayerNorm Demo | SUCCESS |
+| 输出与梯度有限性 | 全部为有限值 |
+| 输入数组完整性 | 未被修改 |
+
+关键实验指标：
+
+- 最大绝对归一化 Token 均值：1.8041124150158794e-16
+- 最大归一化 Token 方差误差：7.205034423640733e-06
+- 单 Token 扰动后其他 Token 的最大输出变化：0.0
+
+实验产物保存在本地 results/day12/，不提交到 GitHub：
+
+- metrics.json
+- layer_norm_heatmap.png
+- layer_norm_statistics.png
+
+本次测试前曾遇到 Windows WinError 1455，表现为 PyTorch DLL 加载失败。后续 PyTorch 导入检查成功，专项测试、全项目测试和 Demo 均已通过。
+
+## 十三、Day 12 知识词云
+
+![Day 12 Knowledge Word Cloud](images/day12-knowledge-wordcloud.svg)
+
+核心关键词：
+
+**LayerNorm · Feature-wise Statistics · Mean · Population Variance · Epsilon · Gamma · Beta · Affine Transform · Broadcasting · Manual Backpropagation · Gradient Aggregation · Pre-LN · Post-LN**
+
+---
+
+**Day 12：理论、实现、梯度验证与可视化实验全部完成。**

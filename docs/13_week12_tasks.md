@@ -4,7 +4,7 @@
 > **日期：** 2026-11-15  
 > **阶段：** Transformer 核心组件 · Day 12  
 > **今日主题：** LayerNorm、Feature-wise Statistics、Affine Parameters、Manual Backpropagation  
-> **状态：** 理论材料与练习脚手架已发布；实现待完成  
+> **状态：** 已完成；17 项专项测试与 110 项全项目测试通过  
 > **核心实现：** exercises/week12.py  
 > **测试：** tests/test_week12_exercises.py  
 > **实验脚本：** scripts/day12_layer_norm_demo.py
@@ -404,3 +404,25 @@ results/day12/
 8. LayerNorm 本身不等于完整 Transformer Block；Residual 与 FFN 是独立组件。
 
 **Day 12 的目标：不仅能写出 LayerNorm 前向，还要能独立推导并实现三个梯度。**
+
+
+## 十二、最终验收记录
+
+本地实际验收结果：
+
+- PyTorch 2.14.1+cu126 导入成功；
+- python -m pytest -q -m exercise tests/test_week12_exercises.py：**17 passed**；
+- python -m pytest -q -m exercise：**110 passed, 4 deselected**；
+- python -m scripts.day12_layer_norm_demo：**SUCCESS**。
+
+Demo 关键指标：
+
+- 最大绝对归一化 Token 均值：1.8041124150158794e-16；
+- 最大归一化 Token 方差误差：7.205034423640733e-06；
+- 单 Token 扰动后其他 Token 的最大输出变化：0.0；
+- 所有输出和梯度均为有限值；
+- 原始输入保持不变。
+
+本地实验文件保存在 results/day12/，不提交到 GitHub。
+
+**Day 12 已完成。**
