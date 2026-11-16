@@ -64,7 +64,7 @@ def main() -> None:
         "both_branches_receive_same_upstream_gradient": bool(
             np.array_equal(grad_skip, upstream) and np.array_equal(grad_branch, upstream)
         ),
-        "zero_weight_identity_gradient_error": float(np.max(np.abs(grad_x - residual_factor * upstream))),
+        "linear_residual_gradient_error": float(np.max(np.abs(grad_x - residual_factor * upstream))),
         "illustrative_plain_local_gradient_factor": plain_factor,
         "illustrative_residual_local_gradient_factor": residual_factor,
         "illustrative_depth_20_plain_gradient_norm": float(plain_norms[-1]),
@@ -107,7 +107,7 @@ def main() -> None:
     assert output.shape == x.shape and linear_output.shape == x.shape
     assert np.array_equal(grad_skip, upstream)
     assert np.array_equal(grad_branch, upstream)
-    assert metrics["zero_weight_identity_gradient_error"] < 1e-12
+    assert metrics["linear_residual_gradient_error"] < 1e-12
     assert metrics["all_outputs_and_gradients_finite"]
     assert metrics["inputs_unchanged"]
     print("\\nSaved: results/day13/metrics.json")
