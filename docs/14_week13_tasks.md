@@ -25,31 +25,31 @@
 
 普通子层：
 
-$
+$$
 Y=F(X).
-$
+$$
 
 残差子层：
 
-$
+$$
 \boxed{Y=X+F(X)}.
-$
+$$
 
 其中 $X$ 是恒等映射分支，$F(X)$ 是 Attention、FFN 或其他子层的输出。残差是逐元素相加，不是拼接或取平均。
 
 若：
 
-$
+$$
 X\in\mathbb{R}^{B\times T\times D},
-$
+$$
 
 则标准残差要求：
 
-$
+$$
 F(X)\in\mathbb{R}^{B\times T\times D},
 \quad
 (B,T,D)+(B,T,D)\rightarrow(B,T,D).
-$
+$$
 
 如果两个分支维度不同，不能直接相加；可使用投影捷径 $Y=W_sX+F(X)$。今天只实现形状一致的恒等映射残差。
 
@@ -57,23 +57,23 @@ $
 
 令：
 
-$
+$$
 Y=X+F(X),\qquad G=\frac{\partial L}{\partial Y}.
-$
+$$
 
 加法节点对两条输入分支的局部导数都是 1：
 
-$
+$$
 \frac{\partial L}{\partial X}\bigg|_{\mathrm{skip}}=G,
 \qquad
 \frac{\partial L}{\partial F(X)}=G.
-$
+$$
 
 第二条梯度还要继续经过 $F$。最终：
 
-$
+$$
 \boxed{\nabla_X L=G+J_F(X)^\top G}
-$
+$$
 
 第一项来自恒等路径，第二项来自残差分支。残差结构提供直接梯度通路，但不能保证梯度永远不消失或放大；两条路径也可能发生抵消。
 
@@ -83,19 +83,19 @@ $
 
 Post-LN：
 
-$
+$$
 X_1=\operatorname{LN}(X+\operatorname{MHA}(X)),
 \quad
 Y=\operatorname{LN}(X_1+\operatorname{FFN}(X_1)).
-$
+$$
 
 Pre-LN：
 
-$
+$$
 X_1=X+\operatorname{MHA}(\operatorname{LN}(X)),
 \quad
 Y=X_1+\operatorname{FFN}(\operatorname{LN}(X_1)).
-$
+$$
 
 两者都使用残差连接，但 LayerNorm 位置不同。Pre-LN 的恒等路径绕过当前子层及其前置 LayerNorm；Post-LN 的相加结果还要经过后置 LayerNorm。
 
@@ -107,9 +107,9 @@ $
 
 输入均为 (B,T,D)，形状必须完全一致。实现：
 
-$
+$$
 Y=X+\text{branch\_output}.
-$
+$$
 
 返回 float64，形状不变，不修改输入。
 
@@ -119,10 +119,10 @@ $
 
 已知 $G=\partial L/\partial Y$，返回 **grad_skip, grad_branch**：
 
-$
+$$
 \boxed{\operatorname{grad\_skip}=G,\quad
 \operatorname{grad\_branch}=G}
-$
+$$
 
 两个返回值必须是独立的 float64 数组。
 
@@ -130,9 +130,9 @@ $
 
 定义最小线性残差分支：
 
-$
+$$
 F(X)=XW+b,\qquad Y=X+XW+b.
-$
+$$
 
 形状：
 
@@ -157,19 +157,19 @@ $
 
 **grad_x, grad_weight, grad_bias**
 
-$
+$$
 \boxed{\frac{\partial L}{\partial X}=G+GW^\top}
-$
+$$
 
-$
+$$
 \boxed{\frac{\partial L}{\partial W}
 =\sum_{b,t}X_{b,t,:}^{\top}G_{b,t,:}}
-$
+$$
 
-$
+$$
 \boxed{\frac{\partial L}{\partial b}
 =\sum_{b,t}G_{b,t,:}}
-$
+$$
 
 注意：grad_x 的第一项 $G$ 就是恒等映射路径带来的梯度。核心实现只用 NumPy；PyTorch 仅在测试中作为参考。
 
