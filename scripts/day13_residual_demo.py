@@ -83,7 +83,7 @@ def main() -> None:
     result_dir = Path("results/day13")
     result_dir.mkdir(parents=True, exist_ok=True)
     (result_dir / "metrics.json").write_text(
-        json.dumps(metrics, indent=2, ensure_ascii=False) + "\\n",
+        json.dumps(metrics, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
 
@@ -93,8 +93,8 @@ def main() -> None:
     print(json.dumps(metrics, indent=2, ensure_ascii=False))
 
     fig, ax = plt.subplots(figsize=(9, 5), constrained_layout=True)
-    ax.semilogy(depths, np.maximum(plain_norms, 1e-18), marker="o", label="Plain path")
-    ax.semilogy(depths, np.maximum(residual_norms, 1e-18), marker="s", label="Residual path")
+    ax.semilogy(depths, plain_norms, marker="o", label="Plain path")
+    ax.semilogy(depths, residual_norms, marker="s", label="Residual path")
     ax.set_title("Illustrative Gradient Norm Across Repeated Scalar Mappings")
     ax.set_xlabel("Number of repeated mappings")
     ax.set_ylabel("Gradient norm (log scale)")
@@ -110,9 +110,9 @@ def main() -> None:
     assert metrics["linear_residual_gradient_error"] < 1e-12
     assert metrics["all_outputs_and_gradients_finite"]
     assert metrics["inputs_unchanged"]
-    print("\\nSaved: results/day13/metrics.json")
+    print("\nSaved: results/day13/metrics.json")
     print("Saved: results/day13/gradient_flow_comparison.png")
-    print("\\nSUCCESS: Day 13 Residual Connection checks passed.")
+    print("\nSUCCESS: Day 13 Residual Connection checks passed.")
 
 
 if __name__ == "__main__":
