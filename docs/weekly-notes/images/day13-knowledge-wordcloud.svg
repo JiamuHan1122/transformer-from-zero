@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Day 13 Residual Connections Knowledge Word Cloud</title>
+<desc id="desc">Academic word cloud about residual connections, identity mapping, gradient flow, Jacobians, Pre-LN and Post-LN.</desc>
+<rect width="1600" height="1000" fill="#ffffff"/>
+<text x="800" y="105" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="32" letter-spacing="7" fill="#64748b">TRANSFORMER FROM ZERO · DAY 13</text>
+<text x="800" y="250" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="112" font-weight="700" fill="#2563eb">RESIDUAL</text>
+<text x="800" y="365" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="100" font-weight="700" fill="#0f766e">CONNECTION</text>
+<text x="800" y="485" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="76" font-weight="700" fill="#7c3aed">IDENTITY MAPPING</text>
+<text x="300" y="585" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="56" font-weight="700" fill="#ea580c">GRADIENT FLOW</text>
+<text x="1110" y="585" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="52" font-weight="700" fill="#2563eb">JACOBIAN</text>
+<text x="800" y="675" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="700" fill="#0f766e">SKIP CONNECTION</text>
+<text x="360" y="760" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="42" fill="#7c3aed">CHAIN RULE</text>
+<text x="800" y="760" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="42" fill="#ea580c">ELEMENT-WISE ADDITION</text>
+<text x="1250" y="760" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="42" fill="#2563eb">PRE-LN</text>
+<text x="520" y="850" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="46" fill="#0f766e">POST-LN</text>
+<text x="1030" y="850" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="46" fill="#7c3aed">TRANSFORMER BLOCK</text>
+<text x="800" y="940" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="24" letter-spacing="4" fill="#94a3b8">PRESERVE THE INPUT · LEARN THE RESIDUAL</text>
+</svg>

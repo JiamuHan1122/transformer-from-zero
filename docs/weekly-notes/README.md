@@ -5,6 +5,7 @@
 
 ## Daily notes
 
+- [Day 13 — Residual Connections](2026-11-16-day13-residual-connections.md)
 - [Day 12 — Layer Normalization](2026-11-15-day12-layer-normalization.md)
 - [Day 11 — Decoder Input Pipeline](2026-11-14-day11-decoder-input-pipeline.md)
 - [Day 10 — Positional Encoding](2026-11-13-day10-positional-encoding.md)
