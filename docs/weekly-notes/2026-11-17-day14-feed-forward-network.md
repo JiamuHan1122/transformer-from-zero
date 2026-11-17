@@ -17,6 +17,16 @@ Day 13 的 Residual Connection 提供了恒等映射路径；Day 12 的 LayerNor
 
 **Attention 负责跨 Token 汇聚信息；FFN 负责独立处理每个 Token 内部的特征通道。**
 
+### 1.1 为什么这两种计算要交替出现？
+
+Attention 能根据输入计算不同 Token 之间的权重，并将有关的 Value 信息汇聚到当前位置。FFN 则不直接读取其他 Token，而是对当前 Token 的特征通道执行非线性加工。
+
+必须区分：FFN 不进行直接的跨 Token 混合，不代表 FFN 完全看不到上下文信息。它收到的输入通常已经是 Attention 处理过的隐藏状态，因而可能包含其他 Token 汇聚过来的信息。
+
+这是原始 Transformer 的重要架构分工，但并不是数学上规定所有 Transformer 变体都必须包含完全相同的 FFN。
+
+
+
 ## 二、FFN 的前向传播
 
 设：
@@ -80,6 +90,20 @@ $$
 
 对于 \(D=8,H=32\)，共有 552 个参数。
 
+### 3.1 为什么先升维再降维？
+
+升维的重点不是创造新的输入信息，也不是增加 Token 数，而是提供更多中间特征通道，让非线性网络在更宽的表示空间中形成复杂的特征响应。降维则把中间特征组合回模型维度，方便与输入进行 Residual Addition。
+
+例如 $D=768,H=3072$ 时，含两组 Bias 的参数量为：
+
+$
+2\times768\times3072+3072+768=4{,}722{,}432.
+$
+
+标准 Attention 的 Q、K、V、输出四个宽度为 D 的投影权重约为 $4D^2$，而 $H=4D$ 时，FFN 权重约为 $8D^2$。这里比较的是参数规模，不意味着 FFN 计算时长一定是 Attention 的两倍。
+
+
+
 ## 四、为什么 GELU 是必要的？
 
 如果去掉激活函数：
@@ -99,6 +123,21 @@ Day 05 已有：
 
 今天必须复用它们，不能把 GELU 的实现复制一遍。
 
+### 4.1 GELU 相对于 ReLU 的区别是什么？
+
+原始 Transformer FFN 使用 ReLU，将负输入截断为 0。GELU 的响应更平滑，负输入不一定严格输出 0。今天使用的是 Day 05 的 GELU tanh 近似，而不是精确 erf 版本。
+
+还有一类门控 FFN，例如 SwiGLU，会计算两组投影的逐元素交互：
+
+$
+H=\operatorname{SiLU}(XW_g)\odot(XW_u),
+\qquad Y=HW_d.
+$
+
+这种结构多了门控分支，与简单地替换激活函数不同。今天先完成基础的两层 GELU-FFN，不在练习中提前加入门控结构。
+
+
+
 ## 五、FFN 为什么不混合 Token？
 
 对于每个 Token 位置 \(t\)：
@@ -111,6 +150,47 @@ Y_{b,t,:}
 $$
 
 所有位置共用 W1、b1、W2、b2，但每个位置只读取自己原有的输入特征。因此仅扰动 Token 2 时，其他 Token 的 FFN 输出应保持不变。
+
+### 5.1 一个真正可以手算的双 Token 例子
+
+取 $B=1,T=2,D=2,H=3$，设：
+
+$
+X=\begin{bmatrix}1&0\\0&1\end{bmatrix},
+\quad W_1=\begin{bmatrix}1&-1&0.5\\0.5&1&1\end{bmatrix},
+\quad b_1=0.
+$
+
+**第一步：** 第一层线性投影：
+
+$
+Z=XW_1=\begin{bmatrix}1&-1&0.5\\0.5&1&1\end{bmatrix}.
+$
+
+**第二步：** 对每个中间特征独立执行 GELU tanh 近似：
+
+$
+A\approx\begin{bmatrix}0.8412&-0.1588&0.3457\\0.3457&0.8412&0.8412\end{bmatrix}.
+$
+
+例如 -1 经过 GELU 后约为 -0.1588，而不是像 ReLU 那样直接被置零。
+
+**第三步：** 设：
+
+$
+W_2=\begin{bmatrix}1&0\\0&1\\0.5&-0.5\end{bmatrix},
+\quad b_2=0.
+$
+
+则：
+
+$
+Y=AW_2\approx\begin{bmatrix}1.0140&-0.3317\\0.7663&0.4206\end{bmatrix}.
+$
+
+两个 Token 使用同一套参数，却各自生成不同的非线性特征组合。这里没有跨 Token 的矩阵乘法。
+
+
 
 ## 六、Backward：从输出依次传回输入
 
@@ -169,6 +249,32 @@ $$
 形状分别为：
 
 \`(B,T,D), (D,H), (H,), (H,D), (D,)\`
+
+### 6.1 为什么参数梯度需要求和，输入梯度不需要？
+
+FFN 的 W1、b1、W2、b2 对整个 Batch 中每个 Token 共享，因此各位置的参数梯度贡献必须沿 Batch 和 Token 轴累积。输入 X 则包含每个位置自己的变量，所以输入梯度仍保持 (B,T,D)，不能把不同 Token 的输入梯度求和成一个向量。
+
+反向传播必须倒序：先从第二层得到 W2、b2 的梯度，再乘 $W_2^\top$ 回到隐藏层；随后乘 GELU 的导数得到预激活梯度；最后求 W1、b1 的梯度并传回 X。Day 05 已经实现了 GELU 的导数，我们只需复用。
+
+### 6.2 为什么后面还要残差与 LayerNorm？
+
+对经过 Attention 更新的隐藏状态 $X_1$，常见结构包括：
+
+Pre-LN：
+
+$
+Y=X_1+\operatorname{FFN}(\operatorname{LN}(X_1)).
+$
+
+Post-LN：
+
+$
+Y=\operatorname{LN}(X_1+\operatorname{FFN}(X_1)).
+$
+
+FFN、Residual、LayerNorm 负责的计算不同，排列顺序也会影响梯度路径。今天只独立验证 FFN，后续再组装完整 Transformer Block。
+
+
 
 ## 七、代码任务
 
