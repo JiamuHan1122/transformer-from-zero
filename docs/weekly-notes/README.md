@@ -5,6 +5,7 @@
 
 ## Daily notes
 
+- [Day 14 — Feed-Forward Network](2026-11-17-day14-feed-forward-network.md)
 - [Day 13 — Residual Connections](2026-11-16-day13-residual-connections.md)
 - [Day 12 — Layer Normalization](2026-11-15-day12-layer-normalization.md)
 - [Day 11 — Decoder Input Pipeline](2026-11-14-day11-decoder-input-pipeline.md)
