@@ -4,7 +4,7 @@
 > **日期：** 2026-11-17  
 > **阶段：** Transformer Block 核心结构 · Day 14  
 > **今日主题：** FFN、两次线性变换、GELU、特征升维、共享参数、手动反向传播  
-> **状态：** 理论材料与练习脚手架已发布；代码及实验待验收  
+> **状态：** 本地 15 项专项测试、137 项回归测试及 FFN Demo 已通过；最终代码待推送 GitHub  
 > **核心实现：** exercises/week14.py  
 > **测试：** tests/test_week14_exercises.py  
 > **实验脚本：** scripts/day14_ffn_demo.py
@@ -339,3 +339,14 @@ results/day14/
 5. 在当前 FFN 中，将一个位置的输入修改后，其他位置的输出是否应该改变？
 
 **Day 14 目标：独立实现 FFN 的前向与五组梯度，验证它如何进行逐 Token 的非线性特征变换。**
+
+---
+
+## 十二、Day 14 本地验收记录（2026-11-17）
+
+- 专项测试：`15 passed in 13.42s`。
+- 全项目回归：`137 passed, 4 deselected in 2.46s`。
+- Demo：`SUCCESS: Day 14 FFN checks passed.`。
+- 关键现象：Token 2 的输出 L2 变化约为 `1.3879174060563375`，其他 Token 的最大变化为 `0.0`，证明当前 Position-wise FFN 不直接混合 Token。
+- 输入 `(2,5,8)` → 隐藏层 `(2,5,32)` → 输出 `(2,5,8)`，参数总数 `552`，各输出和梯度均有限。
+- 这些结果来自用户本地实际运行；`exercises/week14.py` 的最终代码尚需推送 GitHub。

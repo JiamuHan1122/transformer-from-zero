@@ -4,7 +4,7 @@
 > **日期：** 2026-11-17  
 > **阶段：** Transformer Block 核心结构 · Day 14  
 > **今日主题：** Feed-Forward Network、GELU、特征升维、Position-wise、Manual Backpropagation  
-> **状态：** 理论学习与练习脚手架已发布；实现及实验待完成  
+> **状态：** 本地实现、15 项专项测试、137 项全项目测试和 Demo 已完成；代码待推送 GitHub  
 > **核心实现：** exercises/week14.py  
 > **测试：** tests/test_week14_exercises.py  
 > **实验脚本：** scripts/day14_ffn_demo.py
@@ -24,7 +24,6 @@ Attention 能根据输入计算不同 Token 之间的权重，并将有关的 Va
 必须区分：FFN 不进行直接的跨 Token 混合，不代表 FFN 完全看不到上下文信息。它收到的输入通常已经是 Attention 处理过的隐藏状态，因而可能包含其他 Token 汇聚过来的信息。
 
 这是原始 Transformer 的重要架构分工，但并不是数学上规定所有 Transformer 变体都必须包含完全相同的 FFN。
-
 
 
 ## 二、FFN 的前向传播
@@ -88,7 +87,7 @@ $$
 N_{\mathrm{params}}=2DH+H+D.
 $$
 
-对于 \(D=8,H=32\)，共有 552 个参数。
+对于 $D=8,H=32$，共有 552 个参数。
 
 ### 3.1 为什么先升维再降维？
 
@@ -96,12 +95,11 @@ $$
 
 例如 $D=768,H=3072$ 时，含两组 Bias 的参数量为：
 
-$
+$$
 2\times768\times3072+3072+768=4{,}722{,}432.
-$
+$$
 
 标准 Attention 的 Q、K、V、输出四个宽度为 D 的投影权重约为 $4D^2$，而 $H=4D$ 时，FFN 权重约为 $8D^2$。这里比较的是参数规模，不意味着 FFN 计算时长一定是 Attention 的两倍。
-
 
 
 ## 四、为什么 GELU 是必要的？
@@ -118,8 +116,8 @@ $$
 
 Day 05 已有：
 
-- \`gelu_tanh_numpy\`；
-- \`gelu_tanh_backward_numpy\`。
+- `gelu_tanh_numpy`；
+- `gelu_tanh_backward_numpy`。
 
 今天必须复用它们，不能把 GELU 的实现复制一遍。
 
@@ -129,18 +127,17 @@ Day 05 已有：
 
 还有一类门控 FFN，例如 SwiGLU，会计算两组投影的逐元素交互：
 
-$
+$$
 H=\operatorname{SiLU}(XW_g)\odot(XW_u),
 \qquad Y=HW_d.
-$
+$$
 
 这种结构多了门控分支，与简单地替换激活函数不同。今天先完成基础的两层 GELU-FFN，不在练习中提前加入门控结构。
 
 
-
 ## 五、FFN 为什么不混合 Token？
 
-对于每个 Token 位置 \(t\)：
+对于每个 Token 位置 $t$：
 
 $$
 Y_{b,t,:}
@@ -155,41 +152,40 @@ $$
 
 取 $B=1,T=2,D=2,H=3$，设：
 
-$
+$$
 X=\begin{bmatrix}1&0\\0&1\end{bmatrix},
 \quad W_1=\begin{bmatrix}1&-1&0.5\\0.5&1&1\end{bmatrix},
 \quad b_1=0.
-$
+$$
 
 **第一步：** 第一层线性投影：
 
-$
+$$
 Z=XW_1=\begin{bmatrix}1&-1&0.5\\0.5&1&1\end{bmatrix}.
-$
+$$
 
 **第二步：** 对每个中间特征独立执行 GELU tanh 近似：
 
-$
+$$
 A\approx\begin{bmatrix}0.8412&-0.1588&0.3457\\0.3457&0.8412&0.8412\end{bmatrix}.
-$
+$$
 
 例如 -1 经过 GELU 后约为 -0.1588，而不是像 ReLU 那样直接被置零。
 
 **第三步：** 设：
 
-$
+$$
 W_2=\begin{bmatrix}1&0\\0&1\\0.5&-0.5\end{bmatrix},
 \quad b_2=0.
-$
+$$
 
 则：
 
-$
+$$
 Y=AW_2\approx\begin{bmatrix}1.0140&-0.3317\\0.7663&0.4206\end{bmatrix}.
-$
+$$
 
 两个 Token 使用同一套参数，却各自生成不同的非线性特征组合。这里没有跨 Token 的矩阵乘法。
-
 
 
 ## 六、Backward：从输出依次传回输入
@@ -244,11 +240,11 @@ $$
 
 五组梯度输出顺序：
 
-\`grad_x, grad_w1, grad_b1, grad_w2, grad_b2\`
+`grad_x, grad_w1, grad_b1, grad_w2, grad_b2`
 
 形状分别为：
 
-\`(B,T,D), (D,H), (H,), (H,D), (D,)\`
+`(B,T,D), (D,H), (H,), (H,D), (D,)`
 
 ### 6.1 为什么参数梯度需要求和，输入梯度不需要？
 
@@ -262,33 +258,32 @@ FFN 的 W1、b1、W2、b2 对整个 Batch 中每个 Token 共享，因此各位�
 
 Pre-LN：
 
-$
+$$
 Y=X_1+\operatorname{FFN}(\operatorname{LN}(X_1)).
-$
+$$
 
 Post-LN：
 
-$
+$$
 Y=\operatorname{LN}(X_1+\operatorname{FFN}(X_1)).
-$
+$$
 
 FFN、Residual、LayerNorm 负责的计算不同，排列顺序也会影响梯度路径。今天只独立验证 FFN，后续再组装完整 Transformer Block。
-
 
 
 ## 七、代码任务
 
 **Task A：FFN Forward**
 
-\`ffn_forward_numpy(x, w1, b1, w2, b2)\`
+`ffn_forward_numpy(x, w1, b1, w2, b2)`
 
 **Task B：FFN Backward**
 
-\`ffn_backward_numpy(grad_output, x, w1, b1, w2)\`
+`ffn_backward_numpy(grad_output, x, w1, b1, w2)`
 
 核心实现只用 NumPy。测试中用 PyTorch Autograd 和 Day 03 的数值梯度做独立校验。
 
-## 八、验收命令
+## 八、验收命令与实际结果
 
 ~~~powershell
 python -m pytest -q -m exercise tests/test_week14_exercises.py
@@ -313,7 +308,94 @@ results/day14/
 └── token_perturbation_impact.png
 ~~~
 
-**请等实际运行后再填写测试通过数量与实验结果，不提前标记完成。**
+**实际测试结果已在下文记录；本地实验通过，远程练习源文件仍需同步。**
+
+### 8.1 Day 14 专项测试（本地实测）
+
+运行：
+
+~~~powershell
+python -m pytest -q -m exercise tests/test_week14_exercises.py
+~~~
+
+结果：
+
+~~~text
+15 passed in 13.42s
+~~~
+
+包括 PyTorch 对照、手工反向传播、数值有限差分、形状与 Token 独立性等验收。
+
+### 8.2 全项目回归测试（本地实测）
+
+~~~powershell
+python -m pytest -q -m exercise
+~~~
+
+结果：
+
+~~~text
+137 passed, 4 deselected in 2.46s
+~~~
+
+说明截至 Day 14，所有被选中的 Exercise 测试均通过。被 deselected 的 4 项不属于这次执行的测试集合。
+
+### 8.3 Demo 运行（本地实测）
+
+~~~powershell
+python -m scripts.day14_ffn_demo
+~~~
+
+终端输出：
+
+~~~text
+SUCCESS: Day 14 FFN checks passed.
+~~~
+
+| 指标 | 实际结果 |
+|---|---:|
+| 输入形状 | (2,5,8) |
+| 中间层形状 | (2,5,32) |
+| 输出形状 | (2,5,8) |
+| 五组梯度形状 | (2,5,8)、(8,32)、(32,)、(32,8)、(8,) |
+| FFN 参数数量 | 552 |
+| 扰动的 Token 下标 | 2 |
+| Token 2 输出变化的 L2 范数 | 1.3879174060563375 |
+| 其他 Token 输出最大变化 | 0.0 |
+| 输出及梯度数值是否全部有限 | true |
+
+### 8.4 两张可视化图的分析
+
+**图一：输入/输出特征热力图**
+
+`ffn_feature_heatmaps.png` 展示了第一个 Batch 内 5 个 Token 的 8 维特征在 FFN 前后的变化。输入、输出的形状相同，但各通道数值的分布明显不同，说明 FFN 实现了逐 Token 的非线性特征变换。
+
+注意：左右两张热力图使用各自的色条，因此不能单凭颜色深浅直接比较输入与输出的绝对数值幅度；Demo 使用固定随机权重，并不是经过训练的语义特征可视化。
+
+**图二：Token 扰动影响**
+
+`token_perturbation_impact.png` 只改变第一个 Batch 中下标为 2 的输入 Token。该位置输出变化的 L2 范数为 1.3879174060563375，而其余 Token 的输出变化均为 0。
+
+对于单独的 Position-wise FFN，有：
+
+$$
+Y_{b,t,:}=f(X_{b,t,:};\theta),
+$$
+
+不同 Token 的直接输入—输出依赖满足：
+
+$$
+\frac{\partial Y_{b,i,:}}{\partial X_{b,j,:}}=0
+\qquad(i\ne j).
+$$
+
+因此，其在 Token 维度的 Jacobian 具有块对角结构。但这个性质不能直接推广到包含 Self-Attention 的完整 Transformer Block。
+
+### 8.5 验收状态与代码同步
+
+上述结果来自本地 VSCode 的实际测试日志和 Demo 输出，已经可以确认 **Day 14 本地练习验收通过**。
+
+GitHub 的 `exercises/week14.py` 在记录本次验收时仍是初始练习脚手架。请先将本地已通过测试的版本提交并推送，才能认定远程代码也完成同步。本笔记不会把本地测试记录误写成已在 GitHub/CI 环境重新执行的结果。
 
 ## 九、Day 14 核心结论
 
@@ -334,4 +416,4 @@ results/day14/
 
 ---
 
-**Day 14：理论与练习材料已准备，等待完成代码与验收。**
+**Day 14：理论、NumPy 实现、五组梯度对照、专项测试、全项目回归测试及可视化 Demo 均已在本地通过；等待同步最终练习源文件到 GitHub。**
