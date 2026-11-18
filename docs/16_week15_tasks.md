@@ -4,7 +4,7 @@
 > **日期：** 2026-11-18  
 > **阶段：** Transformer Block 核心结构 · Day 15  
 > **今日主题：** Encoder Block、Multi-Head Self-Attention、Pre-LN / Post-LN、Residual、LayerNorm、FFN  
-> **状态：** 理论材料、测试与 Demo 脚手架已发布；核心实现待完成  
+> **状态：** 本地 Day 15 前向实现、16 项专项和 153 项回归测试通过；最终代码待推送 GitHub  
 > **核心实现：** exercises/week15.py  
 > **测试：** tests/test_week15_exercises.py  
 > **实验脚本：** scripts/day15_encoder_block_demo.py
@@ -396,3 +396,19 @@ results/day15/
 ---
 
 **Day 15 的核心目标：不只是记住 Transformer Block 的结构图，而是能够从张量维度、计算顺序和模块责任三个角度，独立解释并实现一个完整 Encoder Block。**
+
+
+---
+
+## 十三、Day 15 实验验收记录（本地，2026-11-18）
+
+- Day 15 专项：16 passed in 2.21s。
+- 全项目 Exercise：153 passed, 4 deselected in 2.65s。
+- Demo：SUCCESS: Day 15 Encoder Block checks passed。
+- 形状：输入与 Pre-LN / Post-LN 输出均为 (2,5,8)；注意力权重 (2,2,5,5)。
+- 参数量：840。
+- Pre-LN 与 Post-LN 输出 L2 差异：5.262866564783503。
+- 注意力行和最大误差：2.220446049250313e-16；平均注意力熵 1.3384076372651348 nats。
+- 扰动 Token 2 后，其他 Token 最大绝对元素变化：0.06565182911588863。
+- 数值有限性：true；输入保持不变：true。
+- 注意：上述结果只在用户本地执行，不等同于 GitHub CI 复测。最终练习代码和本地图像尚未推送 GitHub。
