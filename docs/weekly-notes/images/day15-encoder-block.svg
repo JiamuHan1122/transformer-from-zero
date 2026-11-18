@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+<title id="title">Day 15 Transformer Encoder Block Architecture</title>
+<desc id="desc">Side-by-side Pre-LN and Post-LN Transformer Encoder Block diagrams, each with multi-head self-attention, residual connections, layer normalization and feed-forward network.</desc>
+<rect width="1600" height="1080" fill="#FFFFFF"/>
+<g font-family="Arial, 'Microsoft YaHei', 'PingFang SC', 'Noto Sans CJK SC', sans-serif">
+  <text x="800" y="66" text-anchor="middle" font-size="42" font-weight="800" fill="#123A69">TRANSFORMER ENCODER BLOCK · DAY 15</text>
+  <text x="800" y="105" text-anchor="middle" font-size="22" font-weight="600" fill="#62758A">One input sequence · Two sublayers · Two residual paths</text>
+  <path d="M65 132 H1535" stroke="#E3EAF1" stroke-width="2"/>
+
+  <text x="390" y="184" text-anchor="middle" font-size="36" font-weight="850" fill="#1479BA">PRE-LN</text>
+  <text x="1190" y="184" text-anchor="middle" font-size="36" font-weight="850" fill="#15845F">POST-LN</text>
+
+  <!-- Pre-LN column -->
+  <rect x="70" y="216" width="650" height="790" rx="24" fill="#F8FBFF" stroke="#AFC8EA" stroke-width="2"/>
+  <rect x="286" y="242" width="220" height="62" rx="13" fill="#E8F2FF" stroke="#1479BA" stroke-width="2"/>
+  <text x="396" y="281" text-anchor="middle" font-size="27" font-weight="750" fill="#123A69">Input X</text>
+  <path d="M396 304 V342" stroke="#62758A" stroke-width="3" fill="none"/>
+  <path d="M386 332 L396 344 L406 332" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="280" y="348" width="232" height="68" rx="13" fill="#F1EAFE" stroke="#65228A" stroke-width="2"/>
+  <text x="396" y="390" text-anchor="middle" font-size="26" font-weight="750" fill="#452078">LayerNorm 1</text>
+  <path d="M396 416 V454" stroke="#62758A" stroke-width="3"/>
+  <path d="M386 444 L396 456 L406 444" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="242" y="462" width="308" height="88" rx="14" fill="#E5F5F0" stroke="#15845F" stroke-width="2"/>
+  <text x="396" y="498" text-anchor="middle" font-size="25" font-weight="750" fill="#116247">Multi-Head</text>
+  <text x="396" y="530" text-anchor="middle" font-size="25" font-weight="750" fill="#116247">Self-Attention</text>
+  <path d="M396 550 V592" stroke="#62758A" stroke-width="3"/>
+  <path d="M386 582 L396 594 L406 582" stroke="#62758A" stroke-width="3" fill="none"/>
+  <circle cx="396" cy="626" r="28" fill="#FFF0E4" stroke="#E77822" stroke-width="2"/>
+  <text x="396" y="637" text-anchor="middle" font-size="35" font-weight="800" fill="#B94E12">+</text>
+  <path d="M396 654 V692" stroke="#62758A" stroke-width="3"/>
+  <path d="M386 682 L396 694 L406 682" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="280" y="700" width="232" height="68" rx="13" fill="#E8F2FF" stroke="#1479BA" stroke-width="2"/>
+  <text x="396" y="742" text-anchor="middle" font-size="26" font-weight="750" fill="#123A69">State H</text>
+  <path d="M396 768 V802" stroke="#62758A" stroke-width="3"/>
+  <path d="M386 792 L396 804 L406 792" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="280" y="810" width="232" height="68" rx="13" fill="#F1EAFE" stroke="#65228A" stroke-width="2"/>
+  <text x="396" y="852" text-anchor="middle" font-size="26" font-weight="750" fill="#452078">LayerNorm 2</text>
+  <path d="M396 878 V906" stroke="#62758A" stroke-width="3"/>
+  <path d="M386 896 L396 908 L406 896" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="242" y="914" width="308" height="68" rx="13" fill="#E5F5F0" stroke="#15845F" stroke-width="2"/>
+  <text x="396" y="956" text-anchor="middle" font-size="26" font-weight="750" fill="#116247">FFN + Residual</text>
+
+  <!-- Pre-LN residual bypasses -->
+  <path d="M286 272 H145 V626 H366" stroke="#E77822" stroke-width="4" fill="none"/>
+  <path d="M366 616 L378 626 L366 636" stroke="#E77822" stroke-width="4" fill="none"/>
+  <text x="96" y="455" font-size="21" font-weight="700" fill="#B94E12" transform="rotate(-90 96 455)">IDENTITY / SKIP</text>
+  <path d="M280 734 H190 V948 H242" stroke="#E77822" stroke-width="4" fill="none"/>
+  <path d="M230 938 L242 948 L230 958" stroke="#E77822" stroke-width="4" fill="none"/>
+  <text x="154" y="872" font-size="20" font-weight="700" fill="#B94E12" transform="rotate(-90 154 872)">IDENTITY / SKIP</text>
+
+  <!-- Post-LN column -->
+  <rect x="880" y="216" width="650" height="790" rx="24" fill="#F8FCFA" stroke="#A9D7C5" stroke-width="2"/>
+  <rect x="1096" y="242" width="220" height="62" rx="13" fill="#E8F2FF" stroke="#1479BA" stroke-width="2"/>
+  <text x="1206" y="281" text-anchor="middle" font-size="27" font-weight="750" fill="#123A69">Input X</text>
+  <path d="M1206 304 V342" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 332 L1206 344 L1216 332" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="1052" y="348" width="308" height="88" rx="14" fill="#E5F5F0" stroke="#15845F" stroke-width="2"/>
+  <text x="1206" y="384" text-anchor="middle" font-size="25" font-weight="750" fill="#116247">Multi-Head</text>
+  <text x="1206" y="416" text-anchor="middle" font-size="25" font-weight="750" fill="#116247">Self-Attention</text>
+  <path d="M1206 436 V470" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 460 L1206 472 L1216 460" stroke="#62758A" stroke-width="3" fill="none"/>
+  <circle cx="1206" cy="504" r="28" fill="#FFF0E4" stroke="#E77822" stroke-width="2"/>
+  <text x="1206" y="515" text-anchor="middle" font-size="35" font-weight="800" fill="#B94E12">+</text>
+  <path d="M1206 532 V568" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 558 L1206 570 L1216 558" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="1090" y="576" width="232" height="68" rx="13" fill="#F1EAFE" stroke="#65228A" stroke-width="2"/>
+  <text x="1206" y="618" text-anchor="middle" font-size="26" font-weight="750" fill="#452078">LayerNorm 1</text>
+  <path d="M1206 644 V680" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 670 L1206 682 L1216 670" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="1090" y="688" width="232" height="68" rx="13" fill="#E8F2FF" stroke="#1479BA" stroke-width="2"/>
+  <text x="1206" y="730" text-anchor="middle" font-size="26" font-weight="750" fill="#123A69">State H</text>
+  <path d="M1206 756 V790" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 780 L1206 792 L1216 780" stroke="#62758A" stroke-width="3" fill="none"/>
+  <rect x="1052" y="798" width="308" height="68" rx="13" fill="#E5F5F0" stroke="#15845F" stroke-width="2"/>
+  <text x="1206" y="840" text-anchor="middle" font-size="26" font-weight="750" fill="#116247">FFN</text>
+  <path d="M1206 866 V900" stroke="#62758A" stroke-width="3"/>
+  <path d="M1196 890 L1206 902 L1216 890" stroke="#62758A" stroke-width="3" fill="none"/>
+  <circle cx="1206" cy="936" r="28" fill="#FFF0E4" stroke="#E77822" stroke-width="2"/>
+  <text x="1206" y="947" text-anchor="middle" font-size="35" font-weight="800" fill="#B94E12">+</text>
+  <path d="M1206 964 V984" stroke="#62758A" stroke-width="3"/>
+  <rect x="1380" y="904" width="130" height="64" rx="12" fill="#F1EAFE" stroke="#65228A" stroke-width="2"/>
+  <text x="1445" y="944" text-anchor="middle" font-size="23" font-weight="750" fill="#452078">LN 2</text>
+
+  <!-- Post-LN residual bypasses -->
+  <path d="M1096 272 H952 V504 H1176" stroke="#E77822" stroke-width="4" fill="none"/>
+  <path d="M1164 494 L1176 504 L1164 514" stroke="#E77822" stroke-width="4" fill="none"/>
+  <text x="916" y="420" font-size="20" font-weight="700" fill="#B94E12" transform="rotate(-90 916 420)">IDENTITY / SKIP</text>
+  <path d="M1090 722 H1000 V936 H1176" stroke="#E77822" stroke-width="4" fill="none"/>
+  <path d="M1164 926 L1176 936 L1164 946" stroke="#E77822" stroke-width="4" fill="none"/>
+  <text x="970" y="872" font-size="20" font-weight="700" fill="#B94E12" transform="rotate(-90 970 872)">IDENTITY / SKIP</text>
+
+  <text x="800" y="1045" text-anchor="middle" font-size="22" font-weight="650" fill="#62758A">Schematic comparison · LayerNorm placement changes the computation and gradient paths</text>
+</g>
+</svg>
