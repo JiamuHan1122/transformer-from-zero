@@ -4,7 +4,7 @@
 > **日期：** 2026-11-18  
 > **阶段：** Transformer Block 核心结构 · Day 15  
 > **今日主题：** Encoder Block、Multi-Head Self-Attention、Pre-LN / Post-LN、Residual、LayerNorm、FFN  
-> **状态：** 理论学习与练习脚手架已发布；实现及实验待完成  
+> **状态：** 本地 16 项专项测试、153 项回归测试及 Demo 已通过；最终代码待推送 GitHub  
 > **核心实现：** exercises/week15.py  
 > **测试：** tests/test_week15_exercises.py  
 > **实验脚本：** scripts/day15_encoder_block_demo.py
@@ -379,3 +379,90 @@ results/day15/
 核心关键词：
 
 **Transformer Encoder Block · Multi-Head Self-Attention · Pre-LN · Post-LN · Residual Connection · LayerNorm · Position-wise FFN · Bidirectional Attention · Tensor Shape · Module Composition · NumPy**
+
+
+---
+
+## 十四、Day 15 本地实测结果（2026-11-18）
+
+### 14.1 运行命令与结果
+
+Day 15 专项：
+
+~~~powershell
+python -m pytest -q -m exercise tests/test_week15_exercises.py
+~~~
+
+~~~text
+16 passed in 2.21s
+~~~
+
+全部 Exercise 回归：
+
+~~~powershell
+python -m pytest -q -m exercise
+~~~
+
+~~~text
+153 passed, 4 deselected in 2.65s
+~~~
+
+其中四项 deselected 是此次测试标记选择范围外的项目，不是失败。
+
+Day 15 可视化 Demo：
+
+~~~powershell
+python -m scripts.day15_encoder_block_demo
+~~~
+
+~~~text
+SUCCESS: Day 15 Encoder Block checks passed.
+~~~
+
+### 14.2 主要数值
+
+| 指标 | 本地实测 |
+|---|---:|
+| 输入 / Pre-LN 输出 / Post-LN 输出 | (2,5,8) |
+| 注意力权重形状 | (2,2,5,5) |
+| 模型维度 D | 8 |
+| FFN 隐藏维度 | 32 |
+| 头数 / 每头维度 | 2 / 4 |
+| 参数量 | 840 |
+| Pre-LN 与 Post-LN 输出 L2 差异 | 5.262866564783503 |
+| 注意力行和最大误差 | 2.220446049250313e-16 |
+| 平均注意力熵（nats） | 1.3384076372651348 |
+| 扰动 Token 2 后其他 Token 最大绝对元素变化 | 0.06565182911588863 |
+| 数值是否全部有限 | true |
+| 原始输入是否保持不变 | true |
+
+### 14.3 图一：Pre-LN 与 Post-LN 的输出特征
+
+本地生成文件：results/day15/pre_post_ln_outputs.png。
+
+两种组织方式的输出形状完全相同，但数值分布不同，L2 差异约为 5.26。可见 LayerNorm 位置不是可随意交换的操作。热力图左右色条范围不同，不能直接用相同颜色判断对应的绝对数值；这些权重也是随机初始化的，不能推断哪种结构在真实任务中精度更高。
+
+### 14.4 图二：两个 Attention Head 的权重
+
+本地生成文件：results/day15/attention_weights.png。
+
+图中两个 Head 的 (5,5) Query×Key 注意力矩阵模式不同。Softmax 行和的最大误差为：
+
+$$
+\max_{b,h,i}\left|\sum_j A_{b,h,i,j}-1\right|
+=2.220446049250313\times10^{-16}.
+$$
+
+平均注意力熵为 1.3384076372651348 nats；对 5 个 Key 的均匀分布，最大熵为 $\ln 5\approx 1.60944$ nats。这是随机权重条件下的描述性统计，不代表注意力已学习到可靠的语义关系。
+
+### 14.5 与 Day 14 的跨 Token 对照
+
+Day 14 中单独的 FFN 不直接在 Token 间交换信息；只扰动一个 Token 后，其他 Token 输出变化为 0。Day 15 加入 Self-Attention 后，其他 Token 的最大绝对元素输出变化为 0.06565182911588863。
+
+这表明完整 Encoder Block 的跨 Token 信息通路已经生效。但非零影响本身并不代表影响对任务有益，也不能仅凭本次随机输入分析真实语义。
+
+### 14.6 代码归档状态
+
+上述结果由本地 VSCode 运行日志和用户上传的图像支持，未在 GitHub CI 环境独立复测。GitHub 的 exercises/week15.py 当前仍是练习脚手架，应先将本地已通过测试的最终文件提交并推送。results/day15 下生成的图像也仍位于本地，尚未自动归档到 GitHub。
+
+**Day 15 本地实现、对照测试和可视化实验验收完成；远程代码归档待完成。**
