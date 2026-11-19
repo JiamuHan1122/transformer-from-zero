@@ -142,21 +142,45 @@ def encoder_stack_forward_numpy(
     - Each layer's own weight dictionary must be used in its block call.
     - Do not append attention matrices to the hidden-state history.
     """
+    # Step 1: Validate inputs
     _validate_encoder_stack_inputs(
-        x=x,
-        layers=layers,
-        num_heads=num_heads,
-        norm_first=norm_first,
-        eps=eps,
+        x,
+        layers,
+        num_heads,
+        norm_first,
+        eps
     )
 
-    # TODO 1: initialize the current hidden state from x as float64.
-    # TODO 2: initialize two lists: hidden_states (starting with input)
-    #         and attentions (initially empty).
-    # TODO 3: loop over layers, calling Day 15 with this layer's parameters.
-    # TODO 4: feed each layer's output into the NEXT layer.
-    # TODO 5: stack histories along NEW depth axis=0.
-    # TODO 6: return final output, all attentions, all hidden states.
-    raise NotImplementedError(
-        "Task A: implement multi-layer Transformer Encoder forward."
-    )
+    # Step 2: Convert x to float64 and initialize history lists
+    x = np.asarray(x, dtype=np.float64)
+    all_attentions = []
+    all_hidden_states = [x]
+
+    # Step 3: Iterate over layers and apply the Transformer Encoder Block
+    for layer_idx, params in enumerate(layers):
+        x, attn = transformer_encoder_block_forward_numpy(
+            x,
+            w_q=params["w_q"],
+            w_k=params["w_k"],
+            w_v=params["w_v"],
+            w_o=params["w_o"],
+            num_heads=num_heads,
+            gamma_attn=params["gamma_attn"],
+            beta_attn=params["beta_attn"],
+            w1=params["w1"],
+            b1=params["b1"],
+            w2=params["w2"],
+            b2=params["b2"],
+            gamma_ffn=params["gamma_ffn"],
+            beta_ffn=params["beta_ffn"],
+            norm_first=norm_first,
+            eps=eps,
+        )
+        all_attentions.append(attn)
+        all_hidden_states.append(x)
+
+    # Step 4: Stack attentions and hidden states along the first axis
+    all_attentions = np.stack(all_attentions, axis=0)
+    all_hidden_states = np.stack(all_hidden_states, axis=0)
+
+    return x, all_attentions, all_hidden_states
