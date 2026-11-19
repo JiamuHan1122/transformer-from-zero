@@ -4,7 +4,7 @@
 > **日期：** 2026-11-19  
 > **阶段：** Transformer Encoder · 多层组装与深度诊断  
 > **今日主题：** Encoder Stack、Layer-specific Parameters、Pre-LN / Post-LN、Hidden-State Trajectory、Attention Entropy  
-> **状态：** 理论与练习脚手架已发布；代码实现、测试和 Demo 尚未验收  
+> **状态：** 本地实现、31 项专项测试、184 项回归测试及 Demo 已通过；最终代码待推送 GitHub  
 > **核心实现：** exercises/week16.py  
 > **测试：** tests/test_week16_exercises.py  
 > **实验脚本：** scripts/day16_encoder_stack_demo.py
@@ -168,7 +168,7 @@ python -m pytest -q -m exercise
 python -m scripts.day16_encoder_stack_demo
 ~~~
 
-实验输出将保存于 results/day16，包含 metrics.json 和三张逐层诊断图。完成本地测试后再填写实际数字，不提前宣称成功。
+实验输出将保存于 results/day16，包含 metrics.json 和三张逐层诊断图。本地实测结果见第十节；远程代码同步仍待完成。
 
 ## 九、Day 16 知识词云
 
@@ -178,4 +178,90 @@ python -m scripts.day16_encoder_stack_demo
 
 ---
 
-**Day 16 当前状态：理论与实验脚手架准备完成，等待亲手实现与测试验收。**
+**Day 16 本地实现和实验全部通过，GitHub 最终源代码归档待完成。**
+
+
+## 十、Day 16 实测验收与图像分析（2026-11-19）
+
+### 10.1 测试日志
+
+Day 16 专项测试：31 passed in 9.94s。第一次运行被 Ctrl+C 中断，第二次完整运行通过。
+
+全项目 Exercise 回归测试：184 passed, 4 deselected in 2.93s。4 deselected 表示未包含在本次标记选择的测试集合中，不是失败。
+
+Day 16 Demo 输出：SUCCESS: Day 16 Encoder Stack checks passed.
+
+### 10.2 结构与数值
+
+| 指标 | 本地实测 |
+|---|---:|
+| 输入 / 最终输出形状 | (2,5,8) |
+| Encoder 层数 / Heads | 3 / 2 |
+| FFN 隐藏维度 | 32 |
+| Attention 历史形状 | (3,2,2,5,5) |
+| Hidden States 历史形状 | (4,2,5,8) |
+| 独立参数量 | 2520 |
+| Pre-LN 与 Post-LN 最终输出 L2 差异 | 8.771669656402588 |
+| Pre-LN 最大注意力行和误差 | 2.220446049250313e-16 |
+| Post-LN 最大注意力行和误差 | 2.220446049250313e-16 |
+| all_values_finite / input_unchanged | true / true |
+
+### 10.3 Token 2 扰动沿深度传播
+
+本地图片：results/day16/token_perturbation_by_depth.png。
+
+以下各值为对应位置的输出变化 L2 范数：
+
+| Depth | Token 0 | Token 1 | Token 2 | Token 3 | Token 4 |
+|---|---:|---:|---:|---:|---:|
+| 0 | 0 | 0 | 2.218107 | 0 | 0 |
+| 1 | 0.337019 | 0.050975 | 2.119649 | 0.400781 | 0.316707 |
+| 2 | 0.516403 | 0.126831 | 2.478487 | 0.567419 | 0.434453 |
+| 3 | 0.578622 | 0.155680 | 2.414537 | 0.488250 | 0.533449 |
+
+输入只扰动 Token 2，Layer 1 后其余四个位置均产生响应。响应并非严格单调增大，例如 Token 3 在最后一层反而减弱。
+
+终端另外给出的输出层非扰动位置最大绝对元素差为 0.33338437705081914。它与本表的 Token 级 L2 范数不是同一种统计量。
+
+这能验证跨 Token 的数值传播，但不能单独证明语义因果贡献或任务收益。
+
+### 10.4 Pre-LN / Post-LN 表示范数
+
+本地图片：results/day16/representation_norms.png。
+
+| Depth | Pre-LN 平均 Token L2 | Post-LN 平均 Token L2 |
+|---|---:|---:|
+| 0 | 2.701192 | 2.701192 |
+| 1 | 3.647206 | 2.828414 |
+| 2 | 3.984089 | 2.828410 |
+| 3 | 4.479336 | 2.828415 |
+
+本次 Pre-LN 表示范数持续增大，Post-LN 输出约等于：
+
+$$
+\sqrt{D}=\sqrt{8}\approx2.828427.
+$$
+
+原因是当前 Post-LN 每个 Block 末尾均有 LayerNorm，且使用 gamma=1、beta=0。不能由这些随机初始化的前向范数判断最终训练表现。
+
+各层平均更新范数：Pre-LN 为 2.052692 / 1.582686 / 1.974609；Post-LN 为 1.905969 / 1.154004 / 1.695020。
+
+### 10.5 注意力熵
+
+本地图片：results/day16/attention_entropy_by_layer.png，只显示 Pre-LN。
+
+| Layer | Head 0 | Head 1 |
+|---|---:|---:|
+| 1 | 1.413444 | 1.220510 |
+| 2 | 1.265753 | 1.378495 |
+| 3 | 1.364511 | 1.382302 |
+
+无掩码五 Token 均匀注意力的最大熵为 $\ln 5\approx1.609438$ nats。Head 0 先降后升，Head 1 随深度增加，不能认为更深层必然更集中。
+
+Post-LN 对应熵：Layer 1 为 1.479465、1.350047；Layer 2 为 1.259708、1.398546；Layer 3 为 1.315591、1.293590。全部是固定随机参数下的统计而非学习后的语义证据。
+
+### 10.6 归档状态
+
+本节数值根据用户在 VSCode 本地运行的日志和三张上传图像整理，未声称在 GitHub CI 中复测。
+
+GitHub 当前 exercises/week16.py 仍为包含 NotImplementedError 的练习脚手架；为了保留用户已经通过测试的本地实现，本次只更新文档，未覆盖远程代码。本地 results/day16 图像也未自动上传。
