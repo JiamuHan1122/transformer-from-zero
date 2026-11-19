@@ -4,7 +4,7 @@
 > **日期：** 2026-11-19  
 > **阶段：** Transformer Encoder · 多层组合与表示诊断  
 > **今日主题：** Encoder Stack、Depth、Weight Tying、Hidden-State Trajectory、Cross-Token Influence、Pre-LN / Post-LN  
-> **状态：** 理论材料、练习脚手架、测试和 Demo 已准备；待本地完成与验收  
+> **状态：** 本地实现、31 项专项测试、184 项回归测试与 Demo 已通过；最终代码待推送 GitHub  
 > **核心实现：** exercises/week16.py  
 > **测试：** tests/test_week16_exercises.py  
 > **实验脚本：** scripts/day16_encoder_stack_demo.py
@@ -407,3 +407,21 @@ results/day16/
 ---
 
 **Day 16 完成标准：手写多层 Encoder Forward，保留全部逐层特征与注意力，并通过独立 PyTorch 参考和深度诊断验证其正确性。**
+
+
+---
+
+## 十二、Day 16 本地验收记录（2026-11-19）
+
+- 专项：31 passed in 9.94s；首次测试手动中断，第二次完整通过。
+- 全项目：184 passed, 4 deselected in 2.93s。
+- Demo：SUCCESS: Day 16 Encoder Stack checks passed。
+- 三层、双头、FFN 隐藏维度 32，共 2520 个独立参数。
+- 输出 (2,5,8)；Attention 历史 (3,2,2,5,5)；Hidden States 历史 (4,2,5,8)。
+- Pre-LN / Post-LN 最终输出 L2 差异 8.771669656402588。
+- Pre-LN 深度范数：2.701192 / 3.647206 / 3.984089 / 4.479336；Post-LN：2.701192 / 2.828414 / 2.828410 / 2.828415。
+- 注意力行和最大误差为 2.220446049250313e-16。
+- 扰动 Token 2 后，其他位置从 Layer 1 开始响应；最终其他位置最大绝对元素变化为 0.33338437705081914。
+- all_values_finite=true，input_unchanged=true。
+- 三张本地图位于 results/day16。真实指标和图像解读详见 Day 16 学习笔记第十节。
+- GitHub 最终练习源代码尚待从本地提交；本节不代表远程 CI 已经复测。
