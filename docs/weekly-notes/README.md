@@ -5,6 +5,7 @@
 
 ## Daily notes
 
+- [Day 16 — Deep Transformer Encoder](2026-11-19-day16-deep-transformer-encoder.md)
 - [Day 15 — Transformer Encoder Block](2026-11-18-day15-transformer-encoder-block.md)
 - [Day 14 — Feed-Forward Network](2026-11-17-day14-feed-forward-network.md)
 - [Day 13 — Residual Connections](2026-11-16-day13-residual-connections.md)
