@@ -64,7 +64,10 @@ def _torch_autograd_grads(args):
     output = merged @ to
     loss = torch.sum(output * torch.from_numpy(upstream))
     loss.backward()
-    return [t.grad.detach().numpy() for t in tensors], float(loss)
+    return (
+        [tensor.grad.detach().numpy() for tensor in tensors],
+        float(loss.detach().item()),
+    )
 
 
 def main() -> None:
@@ -136,7 +139,7 @@ def main() -> None:
         "d_k": wq.shape[1] // heads,
         "d_v": wv.shape[1] // heads,
         "output_shape": list(upstream.shape),
-        "gradient_shapes": [list(v.shape) for v in gradients],
+        "gradient_shapes": [list(value.shape) for value in gradients],
         "scalar_objective": objective,
         "gradient_l2_norms": gradient_l2_norms,
         "max_abs_grad_error_vs_autograd": max_abs_errors,
