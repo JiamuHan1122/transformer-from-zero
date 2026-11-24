@@ -4,7 +4,7 @@
 > **日期：** 2026-11-24  
 > **阶段：** Transformer Encoder · 手写反向传播  
 > **主题：** Pre-LN / Post-LN、Residual Gradient Paths、Block-level Jacobian、13 Gradients  
-> **状态：** 理论及脚手架已发布，等待亲手编码、测试和 Demo 验收  
+> **状态：** Day 18 实现与本地验收全部完成；专项 51 passed，全项目 264 passed（4 deselected），Demo SUCCESS  
 > **实现：** exercises/week18.py  
 > **测试：** tests/test_week18_exercises.py  
 > **Demo：** scripts/day18_encoder_block_backward_demo.py
@@ -241,7 +241,7 @@ results/day18/
 └── input_gradient_pre_post.png
 ~~~
 
-**尚未实际运行 Day 18 的完整代码，不能记录任何通过数量或编造误差结果。**
+**已实际完成本地验收；详细数值结果见第十节。**
 
 ## 九、知识词云
 
@@ -252,3 +252,52 @@ results/day18/
 ---
 
 **Day 18 目标：真正写出完整 Encoder Block 的手动反向传播，全部 13 个梯度可解释、可验证；下一阶段才讨论多层 Stack Backward。**
+
+
+## 十、Day 18 实验结果与最终复盘（2026-11-24）
+
+**实际运行状态：完成。** 对照本地 `tfz` 运行日志：
+
+- 专项测试：**51 passed in 17.13s**。
+- 全项目 Exercise 回归：**264 passed, 4 deselected in 3.92s**。
+- Demo：**SUCCESS: Day 18 Encoder Block Backward checks passed**。
+- 全部 13 个梯度（输入 X + 12 组参数）均经 Pre-LN 与 Post-LN 对照。
+- 梯度数值有限（两种模式均 true），调用者数组未被修改（true）。
+- Pre-LN 零分支恒等梯度误差：**0.0**。
+
+### 10.1 手写梯度与 PyTorch Autograd 的一致性
+
+本次输入形状 (2,5,8)，Head 数 2。Pre-LN 13 组梯度的最大绝对误差为 **4.440892098500626e-15**；Post-LN 为 **3.219646771412954e-15**，均处于 float64 数值误差量级。相对 L2 误差各组约 1e-16 到 1e-15，结果支持计算图求导正确。
+
+Post-LN 的 beta_ffn 梯度绝对误差为 **0.0**；误差图中为了对数轴绘制采用 1e-18 的视觉下限，不能误读为实际误差。
+
+### 10.2 有限差分独立验证
+
+| 模式 | 元素 | 数值梯度 | 手写梯度 | 绝对误差 |
+|---|---|---:|---:|---:|
+| Pre-LN | X [0,2,3] | 1.7353097492289749 | 1.7353097487137328 | 5.152420712306593e-10 |
+| Pre-LN | gamma_attn [1] | 1.5795732677403862 | 1.579573268725748 | 9.853617921606883e-10 |
+| Post-LN | X [0,2,3] | 0.2661047373564429 | 0.26610473678547675 | 5.709661632380403e-10 |
+| Post-LN | gamma_attn [1] | 2.061923691121237 | 2.061923690936588 | 1.8464874074197724e-10 |
+
+### 10.3 梯度范数与数学解释
+
+输入 X 的梯度 L2 范数 Pre-LN 为 **14.272661784487477**，Post-LN 为 **12.32516104807154**；Wq 为 16.058930885934796 vs 11.103237236403857；Wo 为 18.025090920961443 vs 11.603729547696704。
+
+但 LN2 参数的方向恰好有所不同：gamma_ffn 为 **2.7754918107402773 vs 7.320416467536417**；beta_ffn 为 **4.842326531009327 vs 10.79141214995242**。
+
+这组差异说明改变 LayerNorm 的放置位置会改变同一组参数与输入下的梯度传播；**不能将单个随机样例下的范数差异归纳为训练稳定性或架构优劣的结论**。
+
+### 10.4 最重要的编码经验
+
+第一，反向必须严格反转 Day 15 的 Pre-LN / Post-LN 前向执行顺序；第二，Residual Backward 不只是分发梯度，还需要在 H、X 两个汇合点求和；第三，调用 LayerNorm Backward 必须提供它在真实前向见到的输入，而不是另一个形状相同的张量。
+
+### 10.5 文件归档及限制
+
+- 代码：`exercises/week18.py`，完整 Pre-LN / Post-LN 数值梯度实现。
+- 测试：`tests/test_week18_exercises.py`，51 项专项通过。
+- Demo：`scripts/day18_encoder_block_backward_demo.py`。
+- 详细全部 13 组误差与梯度范数：`docs/19_week18_tasks.md` 的“Day 18 最终验收与成果归档”。
+- 本地结果：`results/day18/metrics.json`、`gradient_error_comparison.png`、`pre_post_gradient_norms.png`、`input_gradient_pre_post.png`。由于 `.gitignore` 忽略 `results/*`，这些文件**保留在本地而不在本次 GitHub 提交内**。
+
+**Day 18 已完成并归档；接下来可以进入多层 Encoder Stack 的手写反向传播。**
