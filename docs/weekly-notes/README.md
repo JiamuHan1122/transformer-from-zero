@@ -5,6 +5,7 @@
 
 ## Daily notes
 
+- [Day 19 — Encoder Stack Backward](2026-11-25-day19-encoder-stack-backward.md)
 - [Day 18 — Encoder Block Backward](2026-11-24-day18-encoder-block-backward.md)
 - [Day 17 — Attention Backward](2026-11-20-day17-attention-backward.md)
 - [Day 16 — Deep Transformer Encoder](2026-11-19-day16-deep-transformer-encoder.md)
